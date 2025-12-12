@@ -24,6 +24,14 @@ function App() {
 
       if (error) throw error;
 
+      await fetch('https://hook.us2.make.com/4gqypccdyvrz6ke3jbqn7l47djgyul0n', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+
       setSubmitSuccess(true);
       setFormData({ name: '', email: '', company: '', message: '' });
 
