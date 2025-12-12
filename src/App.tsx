@@ -53,6 +53,19 @@ function App() {
     }));
   };
 
+  const scrollToConsultation = () => {
+    const contactSection = document.getElementById('contact');
+    if (contactSection) {
+      contactSection.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start'
+      });
+      setTimeout(() => {
+        setShowForm(true);
+      }, 800);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-black text-white overflow-hidden">
       <nav className="fixed top-0 w-full z-50 bg-black/80 backdrop-blur-sm border-b border-white/10">
@@ -64,7 +77,7 @@ function App() {
             <a href="#features" className="hover:text-white/60 transition-colors">FEATURES</a>
             <a href="#contact" className="hover:text-white/60 transition-colors">CONTACT</a>
             <button
-              onClick={() => setShowForm(true)}
+              onClick={scrollToConsultation}
               className="px-6 py-2.5 border border-white/30 hover:border-white hover:border-glow transition-all duration-300"
             >
               BOOK_A_CALL
@@ -101,7 +114,7 @@ function App() {
 
           <div className="flex flex-col sm:flex-row gap-5 justify-center items-center">
             <button
-              onClick={() => setShowForm(true)}
+              onClick={scrollToConsultation}
               className="group px-10 py-4 bg-white hover:bg-white/90 text-black text-sm tracking-[0.15em] transition-all duration-300 border-glow-hover flex items-center gap-3 font-medium"
             >
               SCHEDULE_CONSULTATION
