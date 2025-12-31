@@ -24,7 +24,7 @@ function App() {
 
       if (error) throw error;
 
-      await fetch('https://hook.us2.make.com/4gqypccdyvrz6ke3jbqn7l47djgyul0n', {
+      await fetch('https://jacob11.app.n8n.cloud/webhook-test/3e257289-1446-4104-a9c7-5cef0d09fdd7', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
