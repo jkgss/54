@@ -11,6 +11,8 @@
     "typecheck": "tsc --noEmit -p tsconfig.app.json"
   },
   "dependencies": {
+    "@sentry/react": "^10.45.0",
+    "@sentry/tracing": "^7.120.4",
     "@supabase/supabase-js": "^2.57.4",
     "framer-motion": "^12.37.0",
     "lucide-react": "^0.344.0",

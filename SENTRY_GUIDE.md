@@ -10,27 +10,20 @@ This guide outlines the practical steps to set up Sentry for error tracking and 
 5. Name the project (e.g., `54-app`).
 
 ## 2. Install the SDK
-The easiest and most reliable way to install and configure Sentry is using their official setup wizard. 
-Run this in your terminal:
-
-```bash
-npx @sentry/wizard@latest -i react
-```
-
-*The wizard will prompt you to log in, select your project, and will automatically install dependencies and inject the initialization code into your app.*
-
-## 3. Manual Configuration (Alternative)
-If you prefer not to use the wizard, install the packages manually:
+Install the packages manually by running in your terminal:
 ```bash
 npm install @sentry/react @sentry/tracing
 ```
 
-Then initialize it in your entry file (e.g., `src/main.tsx`):
+## 3. Configuration
+Make sure you have your Sentry DSN ready from the Sentry Dashboard.
+We have already initialized Sentry in your entry file (`src/main.tsx`).
+Add your environment variable: `VITE_SENTRY_DSN=YOUR_DSN_HERE` to your `.env` file!
 ```typescript
 import * as Sentry from "@sentry/react";
 
 Sentry.init({
-  dsn: "YOUR_PROJECT_DSN_HERE", // Keep this in your .env file
+  dsn: import.meta.env.VITE_SENTRY_DSN || "https://e8cd92cc3e530e784145ca299282fd6f@o4511101309419520.ingest.us.sentry.io/4511101320298497",
   integrations: [
     Sentry.browserTracingIntegration(),
     Sentry.replayIntegration(), // Essential for Session Replay & Feedback
@@ -38,14 +31,6 @@ Sentry.init({
   tracesSampleRate: 1.0, // 100% during development
   replaysSessionSampleRate: 0.1, // 10% for normal sessions in prod
   replaysOnErrorSampleRate: 1.0, // 100% when an error occurs
+  sendDefaultPii: true,
 });
 ```
-
-## 4. Test It
-To verify the setup is working, intentionally throw an error in your app (e.g., add a temporary button):
-```tsx
-<button onClick={() => { throw new Error("Sentry Test Error!"); }}>
-  Test Sentry
-</button>
-```
-Click it, open your Sentry dashboard, and confirm the issue was captured!
