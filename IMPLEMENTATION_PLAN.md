@@ -111,11 +111,12 @@
 ## 5. Development Steps
 
 ### Phase 1: Supabase Setup
-- Initialize Supabase project.
-- Expose environment variables to the frontend.
-- Establish SQL DDL for schemas, tables, and Enums.
-- Configure Row Level Security (RLS) policies.
-- Set up database triggers for tracking history and updating roles automatically (e.g., `user` to `client` on first booking).
+- [x] Initialize Supabase project.
+- [x] Expose environment variables to the frontend.
+- [x] Establish SQL DDL for schemas, tables, and Enums.
+- [x] Configure Row Level Security (RLS) policies.
+- [x] Set up database triggers for tracking history and updating roles automatically (e.g., `user` to `client` on first booking).
+- [x] Create storage buckets with accurate RLS policies (e.g., private `avatars`).
 
 ### Phase 2: Core Frontend & Auth
 - [x] Install UI dependencies (shadcn/ui for Modals, Tables, Forms, and Toasts configured to top-left).
@@ -124,6 +125,7 @@
 - [x] Create role-based route guards in the application framework.
 - [x] Create `ProfilePage` (`/profile`) accessible by all users.
 - [x] Update root Landing Page to replace dashboard button with a User Profile dropdown (with avatar, 'Profile', and 'Log Out' links).
+- [x] Expand `ProfilePage` to incorporate full interactive editing mappings for identity, contact, and physical coordinate attributes.
 
 ### Phase 3: Admin Modules
 - Build the `/admin/dashboard` layout.
