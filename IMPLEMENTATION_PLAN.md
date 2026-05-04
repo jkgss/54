@@ -127,12 +127,16 @@
 - [x] Update root Landing Page to replace dashboard button with a User Profile dropdown (with avatar, 'Profile', and 'Log Out' links).
 - [x] Expand `ProfilePage` to incorporate full interactive editing mappings for identity, contact, and physical coordinate attributes.
 
-### Phase 3: Admin Modules
-- Build the `/admin/dashboard` layout.
-- Implement `/admin/clients` to test reading user data and updating roles/status.
-- Build `/admin/sessions` for full CRUD + Availability Calendar management.
-- Implement `/admin/bookings` to monitor and manage all reservations.
-- Add history/reporting data tables.
+### Phase 3: Admin Modules & Advanced UI
+- [x] Build the basic `/admin/dashboard` layout (including Collapsible Sidebar).
+- [ ] Add Breadcrumbs Navigation to nested admin views.
+- [ ] Implement a Real-Time Notification Center in the header.
+- [ ] Add Trend Indicators with Date Range Filters to overview summary cards.
+- [ ] Implement Contextual Quick Actions (e.g., in headers and tables).
+- [ ] Implement `/admin/clients` to test reading user data and updating roles/status.
+- [ ] Build `/admin/sessions` for full CRUD + Availability Calendar management.
+- [ ] Implement `/admin/bookings` to monitor and manage all reservations.
+- [ ] Add history/reporting data tables.
 
 ### Phase 4: Client Modules
 - Construct `/client/dashboard`.
