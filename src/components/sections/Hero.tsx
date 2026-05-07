@@ -14,21 +14,21 @@ export const Hero = ({ onExplore, onConsultation }: { onExplore: () => void, onC
       <div className="max-w-6xl mx-auto text-center relative z-10 animate-slide-up">
         <div className="mb-10 inline-flex items-center gap-3 px-5 py-2.5 border border-white/20 text-[10px] tracking-[0.4em] uppercase">
           <Sparkles className="w-3.5 h-3.5" />
-          <span className="text-white/70">AI_Automation_Specialists</span>
+          <span className="text-white/70">Web_Infrastructure_Specialists</span>
         </div>
 
         <h1 className="text-6xl md:text-8xl lg:text-9xl font-light mb-10 tracking-[-0.03em] leading-[0.85] uppercase">
-          Sovereign
+          High-Performance
           <br />
           <span className="glow-white font-medium">
-            AI_Agents
+            Lead_Capture
           </span>
         </h1>
 
         <p className="text-base md:text-lg text-white/50 mb-14 max-w-2xl mx-auto leading-relaxed tracking-wider font-light uppercase">
-          Transform your business with intelligent automation.
+          We don't just audit systems.
           <br />
-          Custom AI chat agents, lead generation, and seamless CRM integration.
+          We design and build the high-performance web infrastructure that captures, verifies, and delivers high-intent leads.
         </p>
 
         <div className="flex flex-col sm:flex-row gap-5 justify-center items-center">

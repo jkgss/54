@@ -26,8 +26,8 @@ function ProtectedRoute({ children, requiredRole }: { children: React.ReactNode;
   }
 
   if (requiredRole && role !== requiredRole) {
-    // If user is logged in but lacks the required role, show Unauthorized page
-    return <UnauthorizedPage />;
+    // If user is logged in but lacks the required role, redirect to login
+    return <Navigate to="/login" replace />;
   }
 
   return <>{children}</>;

@@ -173,7 +173,7 @@ export default function LandingPage() {
                 System_Audit
               </h2>
               <p className="text-sm text-white/40 mb-20 tracking-[0.3em] uppercase max-w-2xl mx-auto leading-loose">
-                Identify automation vulnerabilities and potential efficiency gains in your current operational stack.
+                Identify leaks in your current lead capture process and uncover potential efficiency gains in your operational stack.
               </p>
 
               <DiagnosisForm />
@@ -185,11 +185,12 @@ export default function LandingPage() {
 
       <footer className="border-t border-white/10 py-16 px-6 bg-black">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-8">
-          <div className="text-xl font-semibold tracking-[0.3em] uppercase">
-            JKG<span className="font-light">.AI</span>
+          <div className="text-xl font-bold tracking-[0.3em] uppercase flex items-baseline gap-1">
+            <span className="glow-white">JKG</span>
+            <span className="text-white/70 font-light text-sm tracking-[0.4em]">.RESULTS</span>
           </div>
           <div className="text-[10px] text-white/30 tracking-[0.3em] uppercase">
-            © 2024 JKG.AI — ALL_RIGHTS_RESERVED // LONDON_NY_SF
+            © 2024 JKG.RESULTS — ALL_RIGHTS_RESERVED // LONDON_NY_SF
           </div>
           <div className="flex gap-12 text-[10px] tracking-[0.3em] uppercase">
             <a href="#" className="text-white/30 hover:text-white transition-colors">Privacy_Protocol</a>

@@ -22,8 +22,9 @@ export const StickyNav = ({ onBookAudit }: { onBookAudit: () => void }) => {
     <>
       <nav className={`fixed top-0 w-full z-50 transition-all duration-500 ${isScrolled ? 'bg-black/90 backdrop-blur-md border-b border-white/10 py-3' : 'bg-transparent py-6'}`}>
         <div className="max-w-7xl mx-auto px-6 flex justify-between items-center">
-          <div className="text-xl font-semibold tracking-[0.3em] uppercase">
-            JKG<span className="font-light">.AI</span>
+          <div className="text-xl font-bold tracking-[0.3em] uppercase flex items-baseline gap-1">
+            <span className="glow-white">JKG</span>
+            <span className="text-white/70 font-light text-sm tracking-[0.4em]">.RESULTS</span>
           </div>
           <div className="flex gap-10 items-center text-[10px] tracking-[0.2em]">
             <a href="#features" className="hover:text-white/60 transition-colors uppercase">Features</a>

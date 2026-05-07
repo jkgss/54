@@ -11,8 +11,14 @@ const STEPS = [
   },
   {
     id: 'friction',
-    question: 'What is your primary automation bottleneck?',
-    options: ['Data Entry', 'Lead Qualifying', 'Client Communications', 'Reporting']
+    question: 'Which core system module are you looking to implement?',
+    options: [
+      'HIGH_PERFORMANCE_WEB_DESIGN',
+      'AUTOMATED_PHONE_RESPONDER',
+      'INSTANT_LEAD_QUALIFICATION',
+      'AUTOMATED_SMS_&_EMAIL',
+      'CRM_INTEGRATION'
+    ]
   },
   {
     id: 'urgency',
@@ -53,15 +59,24 @@ export const DiagnosisForm = () => {
         .from('contact_submissions')
         .insert([payload]);
 
-      if (error) throw error;
+      if (error) {
+        console.error('Supabase Error:', error);
+        throw error;
+      }
 
-      await fetch('https://jacob11.app.n8n.cloud/webhook-test/3e257289-1446-4104-a9c7-5cef0d09fdd7', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
-      });
-
+      console.log('Submission Successful');
       setIsSuccess(true);
+
+      // Attempt to fire webhook in background
+      try {
+        await fetch('https://jacob11.app.n8n.cloud/webhook-test/3e257289-1446-4104-a9c7-5cef0d09fdd7', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+        });
+      } catch (webhookErr) {
+        console.warn('Optional webhook failed:', webhookErr);
+      }
     } catch (err) {
       console.error('Submission error:', err);
     } finally {
@@ -74,15 +89,23 @@ export const DiagnosisForm = () => {
       <AnimatePresence mode="wait">
         {isSuccess ? (
           <motion.div
+            key="success"
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="text-center py-12 px-8 border border-white/20 bg-white/5"
+            className="text-left py-12 px-8 border border-white/20 bg-black font-mono relative overflow-hidden w-full max-w-[500px] mx-auto my-auto mt-12 z-50"
           >
-            <CheckCircle className="w-12 h-12 mx-auto mb-6 text-white" />
-            <h3 className="text-xl tracking-widest uppercase mb-4">DIAGNOSIS_COMPLETE</h3>
-            <p className="text-white/50 text-sm leading-relaxed">
-              Based on your inputs, our team is preparing a customized automation roadmap. We will reach out within 24 hours.
-            </p>
+            <div className="absolute inset-0 opacity-[0.02] pointer-events-none" style={{ backgroundImage: 'linear-gradient(45deg, white 1px, transparent 1px)', backgroundSize: '20px 20px' }} />
+            <div className="relative z-10">
+              <div className="flex items-center gap-3 mb-8 text-white">
+                 <div className="w-2 h-2 bg-white rounded-full animate-pulse shadow-[0_0_10px_rgba(255,255,255,0.8)]" />
+                 <span className="text-[10px] tracking-[0.4em] uppercase">System_Response</span>
+              </div>
+              <div className="space-y-6 text-xs md:text-sm tracking-[0.2em] md:tracking-widest text-white/70 uppercase">
+                <p className="text-white glow-subtle font-medium">[SUCCESS]: AUDIT_DATA_STREAM_CAPTURED</p>
+                <p>STATUS: ANALYZING_OPERATIONAL_VULNERABILITIES...</p>
+                <p className="pt-4 border-t border-white/10 text-white/50">FINAL_STEP: Check your email for the coordinate report.</p>
+              </div>
+            </div>
           </motion.div>
         ) : currentStep < STEPS.length ? (
           <motion.div
@@ -110,19 +133,21 @@ export const DiagnosisForm = () => {
               {STEPS[currentStep].question}
             </h3>
 
-            <div className="grid gap-4">
-              {STEPS[currentStep].options.map((option) => (
-                <button
-                  key={option}
-                  onClick={() => handleOptionSelect(option)}
-                  className="group w-full p-5 border border-white/10 hover:border-white/40 transition-all text-left flex items-center justify-between"
-                >
-                  <span className="text-sm tracking-widest uppercase text-white/70 group-hover:text-white transition-colors">
-                    {option}
-                  </span>
-                  <ArrowRight className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-all -translate-x-2 group-hover:translate-x-0" />
-                </button>
-              ))}
+            <div className="flex flex-col items-center gap-4">
+              {STEPS[currentStep].options.map((option) => {
+                return (
+                  <button
+                    key={option}
+                    onClick={() => handleOptionSelect(option)}
+                    className="group w-full max-w-[500px] p-6 min-h-[80px] border border-white/10 hover:border-white hover:bg-white/5 hover:shadow-[0_0_15px_rgba(255,255,255,0.15)] active:bg-white/10 transition-all flex items-center justify-center text-center relative"
+                  >
+                    <span className="text-[11px] md:text-sm tracking-widest uppercase text-white/70 group-hover:text-white transition-colors max-w-[90%] leading-relaxed">
+                      {option}
+                    </span>
+                    <ArrowRight className="absolute right-4 md:right-6 w-4 h-4 text-white/50 opacity-0 group-hover:opacity-100 transition-all -translate-x-2 group-hover:translate-x-0 group-hover:text-white shrink-0" />
+                  </button>
+                );
+              })}
             </div>
           </motion.div>
         ) : (

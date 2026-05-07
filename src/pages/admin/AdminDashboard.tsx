@@ -12,6 +12,7 @@ export default function AdminDashboard() {
 
   const navigation = [
     { icon: BarChart3, label: 'OVERVIEW', path: '/admin' },
+    { icon: Shield, label: 'LEAD FEED', path: '/admin/leads' },
     { icon: Calendar, label: 'SESSIONS', path: '/admin/sessions' },
     { icon: Users, label: 'CLIENTS', path: '/admin/clients' },
     { icon: Briefcase, label: 'BOOKINGS', path: '/admin/bookings' },
@@ -175,6 +176,7 @@ export default function AdminDashboard() {
         <div className="p-12 pt-6 flex-1">
            <Routes>
               <Route path="/" element={<OverviewPanel />} />
+              <Route path="/leads" element={<LeadsFeedPanel />} />
               <Route path="/sessions" element={<MockPanel title="SESSION_MANAGEMENT" desc="Central hub for evaluating, modifying, or launching global physical sessions and managing categorical bounds." />} />
               <Route path="/clients" element={<ClientsOverviewPanel />} />
               <Route path="/bookings" element={<BookingsLedgerPanel />} />
@@ -545,6 +547,135 @@ function BookingsLedgerPanel() {
             )}
           </tbody>
         </table>
+      </div>
+    </div>
+  );
+}
+
+function LeadsFeedPanel() {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const [leads, setLeads] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function loadLeads() {
+      try {
+        const { data, error } = await supabase
+          .from('contact_submissions')
+          .select('*')
+          .order('created_at', { ascending: false });
+
+        if (error) {
+          console.error("Leads schema fetch error:", error);
+          throw error;
+        }
+
+        setLeads(data || []);
+      } catch (err) {
+        console.error('Error loading leads:', err);
+      } finally {
+        setLoading(false);
+      }
+    }
+    loadLeads();
+  }, []);
+
+  const updateLeadStatus = async (id: string, newStatus: string) => {
+    try {
+      const { error } = await supabase
+        .from('contact_submissions')
+        .update({ status: newStatus })
+        .eq('id', id);
+        
+      if (error) {
+        console.error("Error updating lead status:", error);
+        return;
+      }
+      
+      setLeads(leads.map(lead => lead.id === id ? { ...lead, status: newStatus } : lead));
+    } catch (err) {
+      console.error("Failed to update status", err);
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <div className="text-[10px] tracking-[0.5em] text-white/20 animate-pulse uppercase">
+          Loading_Lead_Data_Stream...
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="space-y-8">
+      <div className="flex items-center justify-between border-b border-white/10 pb-4">
+         <div>
+            <h3 className="text-[10px] tracking-[0.4em] text-white/60 uppercase">System_Audit_Leads</h3>
+            <p className="text-[10px] tracking-widest text-white/40 mt-1">High-intent submissions from the landing page</p>
+         </div>
+      </div>
+
+      <div className="space-y-4">
+        {leads.length === 0 ? (
+          <div className="p-8 border border-white/10 text-center text-[10px] tracking-widest text-white/40 bg-black/20">
+            NO_LEADS_DETECTED
+          </div>
+        ) : (
+          leads.map((lead) => (
+            <div key={lead.id} className="border border-white/10 bg-black/20 p-6 flex flex-col md:flex-row gap-6 justify-between group hover:border-white/30 transition-all">
+              <div className="space-y-4 flex-1">
+                <div className="flex items-center justify-between">
+                  <div className="flex flex-col gap-1">
+                    <span className="text-sm font-bold tracking-widest uppercase text-white group-hover:glow-white transition-all">{lead.name}</span>
+                    <span className="text-[10px] tracking-widest text-white/50 lowercase font-mono">{lead.email}</span>
+                  </div>
+                  <div className="text-[8px] tracking-[0.3em] text-white/30 uppercase border border-white/5 px-2 py-1 bg-white/5">
+                    {new Date(lead.created_at).toLocaleString()}
+                  </div>
+                </div>
+
+                <div className="space-y-2 text-[10px] tracking-[0.2em] uppercase font-mono border-t border-white/10 pt-4 mt-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <div className="text-white/30 mb-1">TEAM_SIZE</div>
+                      <div className="text-white/80 border border-white/10 bg-white/5 px-3 py-1.5 inline-block">{lead.team || 'N/A'}</div>
+                    </div>
+                    <div>
+                      <div className="text-white/30 mb-1">CORE_MODULE_SELECTED</div>
+                      <div className="text-white/80 border border-white/10 bg-white/5 px-3 py-1.5 inline-block">{lead.friction || 'N/A'}</div>
+                    </div>
+                    <div>
+                      <div className="text-white/30 mb-1">URGENCY_LEVEL</div>
+                      <div className="text-white/80 border border-white/10 bg-white/5 px-3 py-1.5 inline-block">{lead.urgency || 'N/A'}</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="md:w-48 flex flex-col gap-2 shrink-0 border-t md:border-t-0 md:border-l border-white/10 pt-4 md:pt-0 md:pl-6 justify-center">
+                <div className="text-[8px] tracking-[0.3em] text-white/30 mb-2 uppercase text-center">Update_Status</div>
+                {['NEW', 'CONTACTED', 'SOLD'].map((status) => {
+                  const isActive = (lead.status || 'NEW') === status;
+                  return (
+                    <button
+                      key={status}
+                      onClick={() => updateLeadStatus(lead.id, status)}
+                      className={`w-full py-2 text-[10px] tracking-widest uppercase transition-all flex items-center justify-center gap-2 border ${
+                        isActive 
+                          ? 'border-white text-black bg-white glow-white shadow-[0_0_10px_rgba(255,255,255,0.5)]' 
+                          : 'border-white/10 text-white/40 hover:text-white hover:border-white/40 hover:bg-white/5'
+                      }`}
+                    >
+                      {status}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          ))
+        )}
       </div>
     </div>
   );
