@@ -32,7 +32,7 @@ export const DiagnosisForm = () => {
   const [answers, setAnswers] = useState<Record<string, string>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
-  const [contactInfo, setContactInfo] = useState({ name: '', email: '' });
+  const [contactInfo, setContactInfo] = useState({ firstName: '', lastName: '', email: '', gdprConsent: false });
 
   const handleOptionSelect = (option: string) => {
     const stepId = STEPS[currentStep].id;
@@ -52,31 +52,28 @@ export const DiagnosisForm = () => {
       const payload = {
         ...answers,
         ...contactInfo,
-        type: 'DIAGNOSIS_CHECK'
+        type: 'DIAGNOSIS_CHECK',
+        optionalData: {
+          submittedAt: new Date().toISOString(),
+          sourceUrl: window.location.href,
+          referrer: document.referrer,
+          userAgent: navigator.userAgent
+        }
       };
 
-      const { error } = await supabase
-        .from('contact_submissions')
-        .insert([payload]);
+      const response = await fetch('/api/n8n-webhook', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
 
-      if (error) {
-        console.error('Supabase Error:', error);
-        throw error;
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.error || 'Webhook submission failed');
       }
 
       console.log('Submission Successful');
       setIsSuccess(true);
-
-      // Attempt to fire webhook in background
-      try {
-        await fetch('https://jacob11.app.n8n.cloud/webhook-test/3e257289-1446-4104-a9c7-5cef0d09fdd7', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload),
-        });
-      } catch (webhookErr) {
-        console.warn('Optional webhook failed:', webhookErr);
-      }
     } catch (err) {
       console.error('Submission error:', err);
     } finally {
@@ -161,13 +158,21 @@ export const DiagnosisForm = () => {
                 Final_Step / CONTACT_INFO
               </div>
               <form onSubmit={handleSubmit} className="space-y-6">
-                <div>
-                   <input
+                <div className="grid grid-cols-2 gap-4">
+                  <input
                     type="text"
-                    placeholder="FULL_NAME"
+                    placeholder="FIRST_NAME"
                     required
-                    value={contactInfo.name}
-                    onChange={(e) => setContactInfo(prev => ({ ...prev, name: e.target.value }))}
+                    value={contactInfo.firstName}
+                    onChange={(e) => setContactInfo(prev => ({ ...prev, firstName: e.target.value }))}
+                    className="w-full bg-black border-b border-white/20 p-4 outline-none focus:border-white transition-all text-sm tracking-widest uppercase"
+                  />
+                  <input
+                    type="text"
+                    placeholder="LAST_NAME"
+                    required
+                    value={contactInfo.lastName}
+                    onChange={(e) => setContactInfo(prev => ({ ...prev, lastName: e.target.value }))}
                     className="w-full bg-black border-b border-white/20 p-4 outline-none focus:border-white transition-all text-sm tracking-widest uppercase"
                   />
                 </div>
@@ -181,12 +186,25 @@ export const DiagnosisForm = () => {
                     className="w-full bg-black border-b border-white/20 p-4 outline-none focus:border-white transition-all text-sm tracking-widest uppercase"
                   />
                 </div>
+                <div className="flex items-start gap-3 mt-4">
+                  <input
+                    type="checkbox"
+                    id="gdpr"
+                    required
+                    checked={contactInfo.gdprConsent}
+                    onChange={(e) => setContactInfo(prev => ({ ...prev, gdprConsent: e.target.checked }))}
+                    className="mt-1 bg-black border-white/20 focus:ring-0 focus:ring-offset-0"
+                  />
+                  <label htmlFor="gdpr" className="text-[10px] tracking-widest uppercase text-white/50 leading-relaxed cursor-pointer">
+                    I AGREE TO THE PRIVACY PROTOCOL AND CONSENT TO BEING CONTACTED REGARDING THIS AUDIT.
+                  </label>
+                </div>
                 <button
                   type="submit"
                   disabled={isSubmitting}
                   className="w-full py-5 bg-white text-black text-[10px] tracking-[0.4em] font-bold hover:bg-white/90 transition-all uppercase mt-8"
                 >
-                  {isSubmitting ? 'PROCESSING...' : 'REQUEST_VULNERABILITY_AUDIT'}
+                  {isSubmitting ? 'PROCESSING...' : 'Get My Full Audit RoadMap'}
                 </button>
               </form>
           </motion.div>
