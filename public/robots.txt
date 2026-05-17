@@ -1,0 +1,12 @@
+User-agent: *
+Allow: /$
+Allow: /articles
+
+Disallow: /admin/
+Disallow: /client/
+Disallow: /auth/
+Disallow: /profile
+Disallow: /login
+Disallow: /signup
+
+Sitemap: https://jkg.results/sitemap.xml

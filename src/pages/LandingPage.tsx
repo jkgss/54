@@ -5,7 +5,9 @@ import { CaseStudies } from '../components/sections/CaseStudies';
 import { FounderNote } from '../components/sections/FounderNote';
 import { DiagnosisForm } from '../components/sections/DiagnosisForm';
 import { AutomationIndex } from '../components/sections/AutomationIndex';
+import { FAQ } from '../components/sections/FAQ';
 import { AutomationCalculator } from '../components/ui/AutomationCalculator';
+import { Helmet } from 'react-helmet-async';
 import { ComparisonSlider } from '../components/ui/ComparisonSlider';
 import { SystemSchematic } from '../components/ui/SystemSchematic';
 import { LogoCloud } from '../components/ui/LogoCloud';
@@ -29,8 +31,26 @@ export default function LandingPage() {
     document.getElementById('features')?.scrollIntoView({ behavior: 'smooth' });
   };
 
+  const currentDate = new Date().toISOString().split('T')[0];
+
+  const orgSchema = {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "JKG.RESULTS",
+    "url": "https://jkg.results/",
+    "logo": "https://jkg.results/vite.svg",
+    "description": "Enterprise AI Automation and System Architecture."
+  };
+
   return (
     <div className="min-h-screen bg-black text-white font-mono selection:bg-white selection:text-black">
+      <Helmet>
+        <title>JKG.RESULTS | AI Automation Agency</title>
+        <meta name="description" content="Quantifying the Efficiency Gap. We build enterprise AI automation workflows to reclaim lost capacity." />
+        <script type="application/ld+json">
+          {JSON.stringify(orgSchema)}
+        </script>
+      </Helmet>
       <div className="fixed top-6 right-6 z-[60] flex gap-4">
         {user ? (
           <div className="relative">
@@ -180,6 +200,7 @@ export default function LandingPage() {
            </div>
         </section>
 
+        <FAQ />
         <FounderNote />
       </main>
 
@@ -190,9 +211,10 @@ export default function LandingPage() {
             <span className="text-white/70 font-light text-sm tracking-[0.4em]">.RESULTS</span>
           </div>
           <div className="text-[10px] text-white/30 tracking-[0.3em] uppercase">
-            © 2024 JKG.RESULTS — ALL_RIGHTS_RESERVED // LONDON_NY_SF
+            LAST_UPDATED: {currentDate} // © 2024 JKG.RESULTS — ALL_RIGHTS_RESERVED // LONDON_NY_SF
           </div>
           <div className="flex gap-12 text-[10px] tracking-[0.3em] uppercase">
+            <Link to="/articles" className="text-white/30 hover:text-white transition-colors">Insights</Link>
             <a href="#" className="text-white/30 hover:text-white transition-colors">Privacy_Protocol</a>
             <a href="#" className="text-white/30 hover:text-white transition-colors">Operating_Terms</a>
           </div>

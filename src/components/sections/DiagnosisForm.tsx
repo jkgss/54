@@ -56,7 +56,8 @@ export const DiagnosisForm = () => {
         sourceUrl: window.location.href,
         referrer: document.referrer,
         userAgent: navigator.userAgent
-      }
+      },
+      id: Date.now()
     };
 
     // Show success immediately
