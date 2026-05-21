@@ -3,6 +3,7 @@ import { HelmetProvider } from 'react-helmet-async';
 import { AuthProvider, useAuth } from './hooks/useAuth';
 import LandingPage from './pages/LandingPage';
 import ArticlesPage from './pages/Articles';
+import ArticleDetail from './pages/ArticleDetail';
 import LoginPage from './pages/auth/LoginPage';
 import SignupPage from './pages/auth/SignupPage';
 import AdminDashboard from './pages/admin/AdminDashboard';
@@ -44,6 +45,7 @@ function App() {
             {/* Public Routes */}
             <Route path="/" element={<LandingPage />} />
             <Route path="/articles" element={<ArticlesPage />} />
+            <Route path="/articles/:slug" element={<ArticleDetail />} />
             <Route path="/login" element={<LoginPage />} />
           <Route path="/signup" element={<SignupPage />} />
 

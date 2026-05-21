@@ -9,4 +9,4 @@ Disallow: /profile
 Disallow: /login
 Disallow: /signup
 
-Sitemap: https://jkg.results/sitemap.xml
+Sitemap: https://www.jkgresults.com/sitemap.xml

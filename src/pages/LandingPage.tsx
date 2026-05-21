@@ -37,8 +37,8 @@ export default function LandingPage() {
     "@context": "https://schema.org",
     "@type": "Organization",
     "name": "JKG.RESULTS",
-    "url": "https://jkg.results/",
-    "logo": "https://jkg.results/vite.svg",
+    "url": "https://www.jkgresults.com/",
+    "logo": "https://www.jkgresults.com/vite.svg",
     "description": "Enterprise AI Automation and System Architecture."
   };
 

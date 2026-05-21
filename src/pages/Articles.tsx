@@ -3,30 +3,33 @@ import { Link } from 'react-router-dom';
 import { StickyNav } from '../components/ui/StickyNav';
 import { ArrowLeft } from 'lucide-react';
 
-const articles = [
+export const articles = [
   {
     id: 1,
-    title: "The Future of Generative AI in Enterprise Automation",
-    excerpt: "Discover how large language models are transforming backend operations, from predictive analytics to automated customer service resolution.",
+    slug: "what-is-an-automation-audit",
+    title: "What is an Automation Audit?",
+    excerpt: "Discover how a comprehensive operational review uncovers hidden bottlenecks and reveals the true efficiency gap in your organization.",
     date: "2024-10-12",
     readTime: "5 min read",
-    content: "Generative AI is no longer just a novelty. For enterprises, it's becoming the backbone of operational efficiency..."
+    content: "An automation audit is the critical first step in digital transformation. It involves mapping your existing processes, identifying manual data entry points, and calculating the exact cost of human routing."
   },
   {
     id: 2,
-    title: "Why Traditional Workflows Are Costing You 40% of Your Capacity",
-    excerpt: "An in-depth analysis of the 'Efficiency Gap' and how algorithmic task routing can reclaim thousands of hours per year.",
+    slug: "how-to-calculate-roi-of-automation",
+    title: "How to Calculate the ROI of Automation",
+    excerpt: "An in-depth guide to quantifying the financial impact of removing manual tasks and recapturing employee capacity.",
     date: "2024-11-05",
     readTime: "7 min read",
-    content: "When we audit enterprise workflows, we consistently find the same bottleneck: human routing of digital tasks..."
+    content: "When evaluating automation investments, the true ROI isn't just in software savings—it's in the recaptured hours of your highest-paid experts. We break down the formula for measuring this impact."
   },
   {
     id: 3,
+    slug: "building-resilient-data-pipelines-with-modern-webhooks",
     title: "Building Resilient Data Pipelines with Modern Webhooks",
     excerpt: "Learn the architectural best practices for asynchronous data delivery, ensuring zero data loss during high-volume events.",
     date: "2024-12-01",
     readTime: "6 min read",
-    content: "Reliable data transfer is the lifeblood of automation. Moving away from direct database writes to a webhook-first architecture..."
+    content: "Reliable data transfer is the lifeblood of automation. Moving away from direct database writes to a webhook-first architecture provides scale and reliability."
   }
 ];
 
@@ -37,7 +40,7 @@ export default function ArticlesPage() {
     "@context": "https://schema.org",
     "@type": "Blog",
     "name": "JKG.RESULTS Automation Insights",
-    "url": "https://jkg.results/articles",
+    "url": "https://www.jkgresults.com/articles",
     "blogPost": articles.map(article => ({
       "@type": "BlogPosting",
       "headline": article.title,
@@ -78,22 +81,24 @@ export default function ArticlesPage() {
 
           <div className="flex flex-col gap-12">
             {articles.map((article) => (
-              <article key={article.id} className="group cursor-pointer">
-                <div className="flex items-center gap-4 text-[10px] tracking-[0.2em] text-white/30 uppercase mb-4">
-                  <span>{article.date}</span>
-                  <span className="w-1 h-1 rounded-full bg-white/20"></span>
-                  <span>{article.readTime}</span>
-                </div>
-                <h2 className="text-2xl font-light mb-4 group-hover:glow-white transition-all text-white/90">
-                  {article.title}
-                </h2>
-                <p className="text-sm text-white/50 leading-relaxed mb-6">
-                  {article.excerpt}
-                </p>
-                <div className="text-[10px] tracking-[0.3em] uppercase text-white/40 group-hover:text-white transition-colors flex items-center gap-2">
-                  Read_Report <span className="group-hover:translate-x-2 transition-transform">→</span>
-                </div>
-              </article>
+              <Link to={`/articles/${article.slug}`} key={article.id} className="block group cursor-pointer">
+                <article>
+                  <div className="flex items-center gap-4 text-[10px] tracking-[0.2em] text-white/30 uppercase mb-4">
+                    <span>{article.date}</span>
+                    <span className="w-1 h-1 rounded-full bg-white/20"></span>
+                    <span>{article.readTime}</span>
+                  </div>
+                  <h2 className="text-2xl font-light mb-4 group-hover:glow-white transition-all text-white/90">
+                    {article.title}
+                  </h2>
+                  <p className="text-sm text-white/50 leading-relaxed mb-6">
+                    {article.excerpt}
+                  </p>
+                  <div className="text-[10px] tracking-[0.3em] uppercase text-white/40 group-hover:text-white transition-colors flex items-center gap-2">
+                    Read_Report <span className="group-hover:translate-x-2 transition-transform">→</span>
+                  </div>
+                </article>
+              </Link>
             ))}
           </div>
         </div>
