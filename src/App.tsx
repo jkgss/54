@@ -10,6 +10,9 @@ import AdminDashboard from './pages/admin/AdminDashboard';
 import ClientDashboard from './pages/client/ClientDashboard';
 import UnauthorizedPage from './pages/UnauthorizedPage';
 import ProfilePage from './pages/ProfilePage';
+import ApplyPage from './pages/ApplyPage';
+import SuccessPage from './pages/SuccessPage';
+import CancelPage from './pages/CancelPage';
 
 function ProtectedRoute({ children, requiredRole }: { children: React.ReactNode; requiredRole?: 'admin' | 'client' }) {
   const { user, role, loading } = useAuth();
@@ -48,6 +51,9 @@ function App() {
             <Route path="/articles/:slug" element={<ArticleDetail />} />
             <Route path="/login" element={<LoginPage />} />
           <Route path="/signup" element={<SignupPage />} />
+          <Route path="/apply" element={<ApplyPage />} />
+          <Route path="/success" element={<SuccessPage />} />
+          <Route path="/cancel" element={<CancelPage />} />
 
           {/* Protected General Routes */}
           <Route

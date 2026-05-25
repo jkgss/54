@@ -40,11 +40,26 @@ A modern, full-stack web application designed for personal trainers to manage se
     ```
 
 3.  **Set up environment variables**:
-    Create a `.env` file in the root directory and add your Supabase and Sentry credentials:
+    Create a `.env` file in the root directory and add your credentials:
     ```env
+    # Supabase Configuration
     VITE_SUPABASE_URL=your_supabase_url
     VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
-    VITE_SENTRY_DSN=your_sentry_dsn
+    
+    # Sentry Configuration
+    SENTRY_AUTH_TOKEN=sntrys_your_actual_token_here
+
+    # Stripe (required for checkout)
+    STRIPE_SECRET_KEY=sk_test_your_secret_key_here
+    STRIPE_PRICE_ID=price_500_setup_id_here,price_50_retainer_id_here
+
+    # Stripe (optional - only needed if adding client-side Stripe.js later)
+    STRIPE_PUBLISHABLE_KEY=pk_test_your_publishable_key_here
+    STRIPE_PRODUCT_ID=prod_TzEX3RdDVgUnDw
+
+    # App URL (used for Stripe success/cancel redirects)
+    # In production this is set automatically by Vercel; override here for local dev.
+    NEXT_PUBLIC_APP_URL=http://localhost:5174
     ```
 
 4.  **Run the development server**:

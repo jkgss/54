@@ -60,6 +60,33 @@ export const DiagnosisForm = () => {
       id: Date.now()
     };
 
+    // Intercept Web Design path for Stripe Checkout
+    if (answers['friction'] === 'HIGH_PERFORMANCE_WEB_DESIGN') {
+      try {
+        const response = await fetch('/api/create-checkout', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ answers, contactInfo })
+        });
+        
+        const data = await response.json();
+        
+        if (data.url) {
+          window.location.href = data.url; // Redirect directly to Stripe
+          return;
+        } else {
+          console.error('Checkout error:', data.error);
+          setIsSubmitting(false);
+          return;
+        }
+      } catch (err) {
+        console.error('Failed to start checkout:', err);
+        setIsSubmitting(false);
+        return;
+      }
+    }
+
+    // Original behavior for other options
     // Show success immediately
     setIsSuccess(true);
     setIsSubmitting(false);

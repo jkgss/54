@@ -147,3 +147,11 @@
 - Edge Functions hookups for complex operations if needed (e.g., sending email confirmations).
 - Comprehensive UI/UX review (slugs, modal constraints, branding alignment).
 - QA Testing (RLS constraints, role transitions, history logging logic).
+
+### Phase 6: Stripe Hybrid Application Flow
+- [ ] Configure Stripe Dashboard (Product, Price ID, Webhook).
+- [ ] Update environment variables in Vercel and local `.env`.
+- [ ] Create `/apply` route and Application Form Component.
+- [ ] Create `/success` and `/cancel` routes.
+- [ ] Connect `/apply` form to `/api/create-checkout.js` serverless function.
+- [ ] Test end-to-end flow from form submission -> Stripe Checkout -> `/success` redirect -> n8n webhook firing.
