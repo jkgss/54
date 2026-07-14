@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Hero } from '../components/sections/Hero';
 import { Features } from '../components/sections/Features';
 import { CaseStudies } from '../components/sections/CaseStudies';
@@ -14,14 +14,8 @@ import { LogoCloud } from '../components/ui/LogoCloud';
 import { StickyNav } from '../components/ui/StickyNav';
 import { ExitIntent } from '../components/ui/ExitIntent';
 import { Link } from 'react-router-dom';
-import { useAuth } from '../hooks/useAuth';
-import { LogOut, ChevronDown, UserSquare, LayoutDashboard, Shield } from 'lucide-react';
-import { AvatarImage } from '../components/ui/AvatarImage';
-
 export default function LandingPage() {
   const [showCalculator, setShowCalculator] = useState(false);
-  const [dropdownOpen, setDropdownOpen] = useState(false);
-  const { user, role, signOut } = useAuth();
 
   const scrollToContact = () => {
     document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
@@ -30,6 +24,14 @@ export default function LandingPage() {
   const scrollToFeatures = () => {
     document.getElementById('features')?.scrollIntoView({ behavior: 'smooth' });
   };
+
+  useEffect(() => {
+    if (window.location.hash === '#contact') {
+      setTimeout(scrollToContact, 100);
+    } else if (window.location.hash === '#features') {
+      setTimeout(scrollToFeatures, 100);
+    }
+  }, []);
 
   const currentDate = new Date().toISOString().split('T')[0];
 
@@ -51,73 +53,7 @@ export default function LandingPage() {
           {JSON.stringify(orgSchema)}
         </script>
       </Helmet>
-      <div className="fixed top-6 right-6 z-[60] flex gap-4">
-        {user ? (
-          <div className="relative">
-            <button 
-              onClick={() => setDropdownOpen(!dropdownOpen)}
-              className="flex items-center gap-3 px-4 py-2 border border-white/20 bg-black/50 backdrop-blur-md hover:bg-white/10 transition-all group"
-            >
-              <div className="w-6 h-6 rounded-full bg-white/10 flex items-center justify-center overflow-hidden">
-                <AvatarImage 
-                  path={user.user_metadata?.avatar_path} 
-                  url={user.user_metadata?.avatar_url} 
-                  className="w-full h-full" 
-                  fallbackClassName="w-3 h-3" 
-                />
-              </div>
-              <span className="text-[10px] tracking-[0.2em] font-mono uppercase text-white/80 group-hover:text-white">
-                {user.email?.split('@')[0] || 'USER'}
-              </span>
-              <ChevronDown className={`w-3 h-3 text-white/40 transition-transform ${dropdownOpen ? 'rotate-180' : ''}`} />
-            </button>
-            
-            {dropdownOpen && (
-              <div className="absolute right-0 mt-2 w-48 bg-black border border-white/10 shadow-2xl overflow-hidden flex flex-col font-mono text-[10px] tracking-[0.2em] uppercase">
-                {(role === 'user' || role === 'client') && (
-                  <Link 
-                    to="/dashboard" 
-                    className="px-4 py-4 text-white/70 hover:text-white hover:bg-white/5 flex items-center gap-3 transition-colors border-b border-white/5"
-                  >
-                    <LayoutDashboard className="w-4 h-4" />
-                    System_Dashboard
-                  </Link>
-                )}
-                {role === 'admin' && (
-                  <Link 
-                    to="/admin" 
-                    className="px-4 py-4 text-white/70 hover:text-white hover:bg-white/5 flex items-center gap-3 transition-colors border-b border-white/5"
-                  >
-                    <Shield className="w-4 h-4" />
-                    Admin_Control
-                  </Link>
-                )}
-                <Link 
-                  to="/profile" 
-                  className="px-4 py-4 text-white/70 hover:text-white hover:bg-white/5 flex items-center gap-3 transition-colors border-b border-white/5"
-                >
-                  <UserSquare className="w-4 h-4" />
-                  Operator_Profile
-                </Link>
-                <button 
-                  onClick={signOut}
-                  className="px-4 py-4 text-red-500/70 hover:text-red-500 hover:bg-red-500/5 flex items-center gap-3 transition-colors text-left w-full"
-                >
-                  <LogOut className="w-4 h-4" />
-                  Terminate_Session
-                </button>
-              </div>
-            )}
-          </div>
-        ) : (
-          <Link 
-            to="/login" 
-            className="px-6 py-3 border border-white/20 bg-black/50 backdrop-blur-md text-[10px] tracking-[0.3em] uppercase hover:bg-white/10 transition-all"
-          >
-            OPERATOR_LOGIN
-          </Link>
-        )}
-      </div>
+
 
       <StickyNav onBookAudit={scrollToContact} />
       <ExitIntent />
@@ -127,9 +63,9 @@ export default function LandingPage() {
         
         <LogoCloud />
 
-        <section className="py-32 px-6 border-b border-white/5 bg-zinc-950/20">
+        <section className="py-16 md:py-32 px-6 border-b border-white/5 bg-zinc-950/20">
           <div className="max-w-7xl mx-auto">
-            <div className="grid lg:grid-cols-2 gap-24 items-center">
+            <div className="grid lg:grid-cols-2 gap-12 lg:gap-24 items-center">
               <div>
                 <h2 className="text-4xl md:text-5xl font-light mb-8 tracking-tight uppercase leading-tight">
                   Quantifying_The
@@ -161,7 +97,7 @@ export default function LandingPage() {
 
         <Features />
 
-        <section className="py-32 px-6 relative bg-zinc-950/30">
+        <section className="py-16 md:py-32 px-6 relative bg-zinc-950/30">
           <div className="max-w-7xl mx-auto text-center mb-24">
              <h2 className="text-4xl md:text-5xl font-light mb-8 tracking-tight uppercase leading-tight">
                 Procedural_Evolution
@@ -171,7 +107,7 @@ export default function LandingPage() {
           <SystemSchematic />
         </section>
 
-        <section className="py-32 px-6 border-y border-white/5">
+        <section className="py-16 md:py-32 px-6 border-y border-white/5">
           <div className="max-w-7xl mx-auto">
              <div className="text-center mb-24">
                 <h2 className="text-4xl md:text-5xl font-light mb-8 tracking-tight uppercase leading-tight">
@@ -185,14 +121,14 @@ export default function LandingPage() {
 
         <AutomationIndex />
 
-        <section id="contact" className="py-32 px-6 relative overflow-hidden bg-white/5">
+        <section id="contact" className="py-16 md:py-32 px-6 relative overflow-hidden bg-white/5">
            <div className="absolute inset-0 opacity-[0.02] pointer-events-none" style={{ backgroundImage: 'linear-gradient(45deg, white 1px, transparent 1px)', backgroundSize: '60px 60px' }} />
           
            <div className="max-w-4xl mx-auto text-center relative z-10">
-              <h2 className="text-5xl md:text-6xl font-light mb-8 tracking-tight uppercase">
+              <h2 className="text-4xl sm:text-5xl md:text-6xl font-light mb-8 tracking-tight uppercase">
                 System_Audit
               </h2>
-              <p className="text-sm text-white/40 mb-20 tracking-[0.3em] uppercase max-w-2xl mx-auto leading-loose">
+              <p className="text-sm text-white/40 mb-12 md:mb-20 tracking-[0.3em] uppercase max-w-2xl mx-auto leading-loose">
                 Identify leaks in your current lead capture process and uncover potential efficiency gains in your operational stack.
               </p>
 
@@ -204,16 +140,16 @@ export default function LandingPage() {
         <FounderNote />
       </main>
 
-      <footer className="border-t border-white/10 py-16 px-6 bg-black">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-8">
+      <footer className="border-t border-white/10 py-12 md:py-16 px-6 bg-black">
+        <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-8 text-center md:text-left">
           <div className="text-xl font-bold tracking-[0.3em] uppercase flex items-baseline gap-1">
             <span className="glow-white">JKG</span>
             <span className="text-white/70 font-light text-sm tracking-[0.4em]">.RESULTS</span>
           </div>
-          <div className="text-[10px] text-white/30 tracking-[0.3em] uppercase">
+          <div className="text-[10px] text-white/30 tracking-[0.3em] uppercase max-w-sm md:max-w-none leading-relaxed">
             LAST_UPDATED: {currentDate} // © 2024 JKG.RESULTS — ALL_RIGHTS_RESERVED // LONDON_NY_SF
           </div>
-          <div className="flex gap-12 text-[10px] tracking-[0.3em] uppercase">
+          <div className="flex flex-wrap justify-center gap-6 sm:gap-12 text-[10px] tracking-[0.3em] uppercase">
             <Link to="/articles" className="text-white/30 hover:text-white transition-colors">Insights</Link>
             <a href="#" className="text-white/30 hover:text-white transition-colors">Privacy_Protocol</a>
             <a href="#" className="text-white/30 hover:text-white transition-colors">Operating_Terms</a>

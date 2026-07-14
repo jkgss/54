@@ -24,9 +24,9 @@ const insights = [
 
 export const AutomationIndex = () => {
   return (
-    <section id="about" className="py-32 px-6">
+    <section id="about" className="py-16 md:py-32 px-6">
       <div className="max-w-7xl mx-auto">
-        <div className="flex flex-col md:flex-row justify-between items-end mb-24 gap-8">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-16 md:mb-24 gap-8">
           <div className="max-w-2xl">
              <h2 className="text-4xl md:text-5xl font-light mb-8 tracking-tight uppercase">
               The_Automation_Index
@@ -47,7 +47,7 @@ export const AutomationIndex = () => {
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
               transition={{ delay: index * 0.1 }}
-              className="bg-black p-10 group cursor-pointer relative overflow-hidden h-full flex flex-col"
+              className="bg-black p-6 sm:p-10 group cursor-pointer relative overflow-hidden h-full flex flex-col"
             >
               <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-white/20 to-transparent scale-x-0 group-hover:scale-x-100 transition-transform duration-700" />
               

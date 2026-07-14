@@ -62,14 +62,14 @@ export function FAQ() {
   };
 
   return (
-    <section className="py-32 px-6 border-t border-white/5 bg-black">
+    <section className="py-16 md:py-32 px-6 border-t border-white/5 bg-black">
       <Helmet>
         <script type="application/ld+json">
           {JSON.stringify(faqSchema)}
         </script>
       </Helmet>
       <div className="max-w-4xl mx-auto">
-        <div className="text-center mb-20">
+        <div className="text-center mb-12 md:mb-20">
            <h2 className="text-4xl md:text-5xl font-light mb-6 tracking-tight uppercase leading-tight">
              Frequently_Asked
              <br />

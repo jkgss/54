@@ -64,7 +64,9 @@ export default function ArticlesPage() {
         </script>
       </Helmet>
 
-      <StickyNav onBookAudit={() => {}} />
+      <StickyNav onBookAudit={() => {
+        window.location.href = '/#contact';
+      }} />
 
       <main className="flex-grow pt-32 px-6">
         <div className="max-w-4xl mx-auto">

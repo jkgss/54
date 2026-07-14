@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowRight, CheckCircle, ChevronLeft } from 'lucide-react';
+import { ArrowRight, ChevronLeft } from 'lucide-react';
 
 const STEPS = [
   {
@@ -39,11 +39,11 @@ export const DiagnosisForm = () => {
     if (currentStep < STEPS.length - 1) {
       setCurrentStep(prev => prev + 1);
     } else {
-      setCurrentStep(STEPS.length); // Final step: Contact Info
+      setCurrentStep(STEPS.length);
     }
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
 
@@ -51,71 +51,28 @@ export const DiagnosisForm = () => {
       ...answers,
       ...contactInfo,
       type: 'DIAGNOSIS_CHECK',
-      optionalData: {
-        submittedAt: new Date().toISOString(),
-        sourceUrl: window.location.href,
-        referrer: document.referrer,
-        userAgent: navigator.userAgent
-      },
-      id: Date.now()
+      submittedAt: new Date().toISOString(),
     };
 
-    // Intercept Web Design path for Stripe Checkout
-    if (answers['friction'] === 'HIGH_PERFORMANCE_WEB_DESIGN') {
-      try {
-        const response = await fetch('/api/create-checkout', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ answers, contactInfo })
-        });
-        
-        const data = await response.json();
-        
-        if (data.url) {
-          window.location.href = data.url; // Redirect directly to Stripe
-          return;
-        } else {
-          console.error('Checkout error:', data.error);
-          setIsSubmitting(false);
-          return;
-        }
-      } catch (err) {
-        console.error('Failed to start checkout:', err);
-        setIsSubmitting(false);
-        return;
-      }
-    }
+    // Local frontend-only submission — no backend, Stripe, or webhook
+    console.info('[Audit Request]', payload);
 
-    // Original behavior for other options
-    // Show success immediately
     setIsSuccess(true);
     setIsSubmitting(false);
-
-    // Clear form state
     setContactInfo({ firstName: '', lastName: '', email: '', gdprConsent: false });
     setAnswers({});
     setCurrentStep(0);
-
-    // Send data in the background silently
-    fetch(import.meta.env.VITE_N8N_WEBHOOK_URL, {
-      method: 'POST',
-      mode: 'cors',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload),
-    }).catch(err => {
-      console.error('Webhook submission error:', err);
-    });
   };
 
   return (
-    <div className="max-w-xl mx-auto min-h-[400px]">
+    <div className="max-w-xl mx-auto min-h-[320px] sm:min-h-[400px]">
       <AnimatePresence mode="wait">
         {isSuccess ? (
           <motion.div
             key="success"
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="text-left py-12 px-8 border border-white/20 bg-black font-mono relative overflow-hidden w-full max-w-[500px] mx-auto my-auto mt-12 z-50"
+            className="text-left py-8 px-6 md:py-12 md:px-8 border border-white/20 bg-black font-mono relative overflow-hidden w-full max-w-[500px] mx-auto mt-8 sm:mt-12 z-50"
           >
             <div className="absolute inset-0 opacity-[0.02] pointer-events-none" style={{ backgroundImage: 'linear-gradient(45deg, white 1px, transparent 1px)', backgroundSize: '20px 20px' }} />
             <div className="relative z-10">
@@ -138,7 +95,7 @@ export const DiagnosisForm = () => {
             exit={{ opacity: 0, x: -20 }}
             className="space-y-8"
           >
-            <div className="flex items-center justify-between mb-12">
+            <div className="flex items-center justify-between mb-8 sm:mb-12">
               <div className="text-[10px] tracking-[0.3em] font-medium text-white/40 uppercase">
                 Step-0{currentStep + 1} / 04
               </div>
@@ -152,7 +109,7 @@ export const DiagnosisForm = () => {
               )}
             </div>
 
-            <h3 className="text-2xl md:text-3xl font-light tracking-tight mb-12 leading-tight">
+            <h3 className="text-xl sm:text-2xl md:text-3xl font-light tracking-tight mb-8 sm:mb-12 leading-tight">
               {STEPS[currentStep].question}
             </h3>
 
@@ -162,9 +119,9 @@ export const DiagnosisForm = () => {
                   <button
                     key={option}
                     onClick={() => handleOptionSelect(option)}
-                    className="group w-full max-w-[500px] p-6 min-h-[80px] border border-white/10 hover:border-white hover:bg-white/5 hover:shadow-[0_0_15px_rgba(255,255,255,0.15)] active:bg-white/10 transition-all flex items-center justify-center text-center relative"
+                    className="group w-full max-w-[500px] p-4 md:p-6 min-h-[60px] md:min-h-[80px] border border-white/10 hover:border-white hover:bg-white/5 hover:shadow-[0_0_15px_rgba(255,255,255,0.15)] active:bg-white/10 transition-all flex items-center justify-center text-center relative"
                   >
-                    <span className="text-[11px] md:text-sm tracking-widest uppercase text-white/70 group-hover:text-white transition-colors max-w-[90%] leading-relaxed">
+                    <span className="text-[10px] md:text-sm tracking-wide md:tracking-widest uppercase text-white/70 group-hover:text-white transition-colors max-w-[85%] leading-relaxed break-words">
                       {option}
                     </span>
                     <ArrowRight className="absolute right-4 md:right-6 w-4 h-4 text-white/50 opacity-0 group-hover:opacity-100 transition-all -translate-x-2 group-hover:translate-x-0 group-hover:text-white shrink-0" />
@@ -184,7 +141,7 @@ export const DiagnosisForm = () => {
               Final_Step / CONTACT_INFO
             </div>
             <form onSubmit={handleSubmit} className="space-y-6">
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <input
                   type="text"
                   placeholder="FIRST_NAME"

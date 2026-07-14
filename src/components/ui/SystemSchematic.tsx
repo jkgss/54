@@ -12,55 +12,57 @@ export const SystemSchematic = () => {
   const opacity = useTransform(scrollYProgress, [0.1, 0.3, 0.7, 0.9], [0, 1, 1, 0]);
 
   return (
-    <div ref={containerRef} className="relative w-full py-24 flex items-center justify-center">
-      <motion.div style={{ opacity }} className="relative w-full max-w-4xl aspect-[2/1]">
-        <svg viewBox="0 0 800 400" className="w-full h-full">
-          {/* Nodes */}
-          <CircleNode x={100} y={200} label="DATA_INPUT" delay={0.1} />
-          <CircleNode x={300} y={100} label="ANALYSIS_ENGINE" delay={0.3} />
-          <CircleNode x={300} y={300} label="LOGIC_GATE" delay={0.4} />
-          <CircleNode x={500} y={200} label="ACTION_HANDLER" delay={0.6} />
-          <CircleNode x={700} y={200} label="OUTPUT_RESULT" delay={0.8} />
+    <div ref={containerRef} className="relative w-full py-12 md:py-24 flex items-center justify-center">
+      <motion.div style={{ opacity }} className="relative w-full max-w-4xl overflow-x-auto pb-4 scrollbar-thin scrollbar-thumb-white/10 scrollbar-track-transparent">
+        <div className="min-w-[640px] md:min-w-0 aspect-[2/1]">
+          <svg viewBox="0 0 800 400" className="w-full h-full">
+            {/* Nodes */}
+            <CircleNode x={100} y={200} label="DATA_INPUT" delay={0.1} />
+            <CircleNode x={300} y={100} label="ANALYSIS_ENGINE" delay={0.3} />
+            <CircleNode x={300} y={300} label="LOGIC_GATE" delay={0.4} />
+            <CircleNode x={500} y={200} label="ACTION_HANDLER" delay={0.6} />
+            <CircleNode x={700} y={200} label="OUTPUT_RESULT" delay={0.8} />
 
-          {/* Connections */}
-          <motion.path
-            d="M 140 200 L 260 100"
-            fill="none"
-            stroke="white"
-            strokeWidth="1"
-            strokeDasharray="4 4"
-            style={{ pathLength }}
-          />
-          <motion.path
-            d="M 140 200 L 260 300"
-            fill="none"
-            stroke="white"
-            strokeWidth="1"
-            strokeDasharray="4 4"
-            style={{ pathLength }}
-          />
-          <motion.path
-            d="M 340 100 L 460 200"
-            fill="none"
-            stroke="white"
-            strokeWidth="1"
-            style={{ pathLength }}
-          />
-          <motion.path
-            d="M 340 300 L 460 200"
-            fill="none"
-            stroke="white"
-            strokeWidth="1"
-            style={{ pathLength }}
-          />
-          <motion.path
-            d="M 540 200 L 660 200"
-            fill="none"
-            stroke="white"
-            strokeWidth="1"
-            style={{ pathLength }}
-          />
-        </svg>
+            {/* Connections */}
+            <motion.path
+              d="M 140 200 L 260 100"
+              fill="none"
+              stroke="white"
+              strokeWidth="1"
+              strokeDasharray="4 4"
+              style={{ pathLength }}
+            />
+            <motion.path
+              d="M 140 200 L 260 300"
+              fill="none"
+              stroke="white"
+              strokeWidth="1"
+              strokeDasharray="4 4"
+              style={{ pathLength }}
+            />
+            <motion.path
+              d="M 340 100 L 460 200"
+              fill="none"
+              stroke="white"
+              strokeWidth="1"
+              style={{ pathLength }}
+            />
+            <motion.path
+              d="M 340 300 L 460 200"
+              fill="none"
+              stroke="white"
+              strokeWidth="1"
+              style={{ pathLength }}
+            />
+            <motion.path
+              d="M 540 200 L 660 200"
+              fill="none"
+              stroke="white"
+              strokeWidth="1"
+              style={{ pathLength }}
+            />
+          </svg>
+        </div>
       </motion.div>
     </div>
   );

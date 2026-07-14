@@ -1,4 +1,4 @@
-import { Phone, Zap, Globe, CheckCircle } from 'lucide-react';
+import { Phone, Zap, Globe } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 const features = [
@@ -24,10 +24,10 @@ const features = [
 
 export const Features = () => {
   return (
-    <section id="features" className="py-32 px-6 relative">
+    <section id="features" className="py-16 md:py-32 px-6 relative">
       <div className="max-w-7xl mx-auto">
-        <div className="text-center mb-24">
-          <h2 className="text-5xl md:text-6xl font-light mb-6 tracking-tight uppercase">
+        <div className="text-center mb-16 md:mb-24">
+          <h2 className="text-4xl sm:text-5xl md:text-6xl font-light mb-6 tracking-tight uppercase">
             Cutting_Edge
             <br />
             <span className="glow-subtle font-medium">Capabilities</span>
@@ -42,7 +42,7 @@ export const Features = () => {
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.1 }}
-              className="group p-10 border border-white/10 hover:border-white/30 transition-all duration-500 hover:border-glow bg-black flex flex-col h-full"
+              className="group p-6 sm:p-10 border border-white/10 hover:border-white/30 transition-all duration-500 hover:border-glow bg-black flex flex-col h-full"
             >
               <div className="w-12 h-12 border border-white/20 flex items-center justify-center mb-8 group-hover:border-white/40 transition-all duration-300">
                 <feature.icon className="w-6 h-6" />

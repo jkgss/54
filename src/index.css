@@ -7,10 +7,11 @@
 @layer base {
   html {
     scroll-behavior: smooth;
+    background-color: #000000;
   }
 
   body {
-    @apply antialiased;
+    @apply antialiased bg-black;
     font-family: 'IBM Plex Mono', monospace;
   }
 }

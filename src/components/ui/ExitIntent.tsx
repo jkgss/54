@@ -33,7 +33,7 @@ export const ExitIntent = () => {
         <motion.div
           initial={{ opacity: 0, scale: 0.9, y: 20 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
-          className="relative w-full max-w-lg bg-zinc-900 border border-white/20 p-10 overflow-hidden"
+          className="relative w-full max-w-lg bg-zinc-900 border border-white/20 p-6 sm:p-10 overflow-hidden"
         >
           {/* Background pattern */}
           <div className="absolute inset-0 opacity-[0.03] pointer-events-none">
