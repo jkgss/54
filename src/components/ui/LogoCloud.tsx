@@ -12,12 +12,12 @@ const sectors = [
 
 export const LogoCloud = () => {
   return (
-    <div className="py-24 border-y border-white/5 bg-white/[0.01]">
-      <div className="max-w-7xl mx-auto px-6">
-        <div className="text-center mb-16">
-          <p className="text-[10px] text-white/40 tracking-[0.5em] uppercase">Industry_Integration_Matrix</p>
+    <div className="py-24 border-y border-white/5 bg-white/[0.01] overflow-x-hidden w-full">
+      <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 flex flex-col items-center justify-center text-center min-w-0">
+        <div className="text-center mb-16 w-full">
+          <p className="text-[10px] text-white/40 tracking-[0.3em] sm:tracking-[0.5em] uppercase break-words [overflow-wrap:anywhere]">Industry_Integration_Matrix</p>
         </div>
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-12 text-white/30">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8 sm:gap-12 text-white/30 w-full min-w-0">
           {sectors.map((sector, index) => (
             <motion.div
               key={sector.name}
