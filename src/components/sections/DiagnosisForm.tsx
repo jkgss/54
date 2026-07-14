@@ -22,7 +22,7 @@ const STEPS = [
   {
     id: 'urgency',
     question: 'How soon do you need to implement a solution?',
-    options: ['Immediately', 'Next 3 months', 'Researching for future']
+    options: ['1 Week', 'Next 3 months', 'Researching for future']
   }
 ];
 

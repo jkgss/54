@@ -14,19 +14,19 @@ export const AutomationCalculator = () => {
   }, [teamSize, manualHours]);
 
   return (
-    <div className="p-8 border border-white/10 bg-black/50 backdrop-blur-xl relative overflow-hidden group">
+    <div className="p-5 sm:p-8 border border-white/10 bg-black/50 relative overflow-hidden group w-full">
       <div className="absolute inset-0 bg-gradient-to-br from-white/[0.02] to-transparent pointer-events-none" />
       
-      <h3 className="text-xl font-medium mb-8 tracking-wide flex items-center gap-3">
-        AUTOMATION_CALCULATOR
-        <span className="w-2 h-2 bg-white rounded-full animate-pulse" />
+      <h3 className="text-base sm:text-xl font-medium mb-8 tracking-wide flex items-center gap-3 uppercase">
+        ROI_Calculator_Preview
+        <span className="w-2 h-2 bg-white rounded-full animate-pulse shrink-0" />
       </h3>
 
-      <div className="space-y-8">
+      <div className="space-y-8 relative z-10">
         <div>
-          <div className="flex justify-between mb-4">
+          <div className="flex justify-between gap-4 mb-4">
             <label className="text-xs text-white/50 tracking-widest uppercase">Team Size</label>
-            <span className="text-white font-mono">{teamSize} PERS.</span>
+            <span className="text-white font-mono shrink-0">{teamSize} PERS.</span>
           </div>
           <input
             type="range"
@@ -39,9 +39,9 @@ export const AutomationCalculator = () => {
         </div>
 
         <div>
-          <div className="flex justify-between mb-4">
-            <label className="text-xs text-white/50 tracking-widest uppercase">Manual Hours / Week / Person</label>
-            <span className="text-white font-mono">{manualHours} HRS</span>
+          <div className="flex justify-between gap-4 mb-4">
+            <label className="text-xs text-white/50 tracking-widest uppercase min-w-0">Manual Hours / Week / Person</label>
+            <span className="text-white font-mono shrink-0">{manualHours} HRS</span>
           </div>
           <input
             type="range"
@@ -55,16 +55,16 @@ export const AutomationCalculator = () => {
 
         <div className="pt-8 border-t border-white/10">
           <div className="text-xs text-white/40 tracking-[0.2em] mb-4 uppercase">Potential Reclaimed Time</div>
-          <div className="relative">
+          <div className="relative flex flex-wrap items-baseline gap-x-4 gap-y-2">
             <motion.div
               key={reclaimedTime}
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
-              className="text-5xl md:text-6xl font-light glow-white inline-block"
+              className="text-4xl sm:text-5xl md:text-6xl font-light glow-white inline-block"
             >
               {reclaimedTime.toLocaleString()}
             </motion.div>
-            <span className="text-sm text-white/40 ml-4 tracking-widest uppercase">Hours / Month</span>
+            <span className="text-sm text-white/40 tracking-widest uppercase">Hours / Month</span>
           </div>
           <p className="mt-4 text-[10px] text-white/30 leading-relaxed max-w-xs uppercase tracking-tighter">
             *Based on an average 80% automation efficiency across standardized operational workflows.
