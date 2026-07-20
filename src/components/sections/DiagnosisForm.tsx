@@ -30,8 +30,14 @@ export const DiagnosisForm = () => {
   const [currentStep, setCurrentStep] = useState(0);
   const [answers, setAnswers] = useState<Record<string, string>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isSuccess, setIsSuccess] = useState(false);
-  const [contactInfo, setContactInfo] = useState({ firstName: '', lastName: '', email: '', gdprConsent: false });
+  const [contactInfo, setContactInfo] = useState({
+    firstName: '',
+    lastName: '',
+    email: '',
+    phone: '',
+    businessName: '',
+    gdprConsent: false,
+  });
 
   const handleOptionSelect = (option: string) => {
     const stepId = STEPS[currentStep].id;
@@ -43,51 +49,46 @@ export const DiagnosisForm = () => {
     }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
 
-    const payload = {
-      ...answers,
-      ...contactInfo,
-      type: 'DIAGNOSIS_CHECK',
-      submittedAt: new Date().toISOString(),
+    const formData = {
+      name: `${contactInfo.firstName} ${contactInfo.lastName}`.trim(),
+      email: contactInfo.email,
+      phone: contactInfo.phone,
+      businessName: contactInfo.businessName,
+      team: answers.team,
+      friction: answers.friction,
+      urgency: answers.urgency,
     };
 
-    // Local frontend-only submission — no backend, Stripe, or webhook
-    console.info('[Audit Request]', payload);
+    try {
+      // Post to our Vercel proxy (avoids browser CORS + HTTPS→HTTP mixed-content blocks)
+      const response = await fetch('/api/n8n-webhook', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
 
-    setIsSuccess(true);
-    setIsSubmitting(false);
-    setContactInfo({ firstName: '', lastName: '', email: '', gdprConsent: false });
-    setAnswers({});
-    setCurrentStep(0);
+      if (!response.ok) {
+        console.error('n8n proxy failed', response.status, await response.text());
+      }
+    } catch (error) {
+      console.error('Error sending data to n8n:', error);
+    }
+
+    const calendlyUrl = `https://calendly.com/jacob-jkgresults?name=${encodeURIComponent(formData.name)}&email=${encodeURIComponent(formData.email)}`;
+
+    window.location.href = calendlyUrl;
   };
 
   return (
     <div className="max-w-xl mx-auto min-h-[320px] sm:min-h-[400px]">
       <AnimatePresence mode="wait">
-        {isSuccess ? (
-          <motion.div
-            key="success"
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            className="text-left py-8 px-6 md:py-12 md:px-8 border border-white/20 bg-black font-mono relative overflow-hidden w-full max-w-[500px] mx-auto mt-8 sm:mt-12 z-50"
-          >
-            <div className="absolute inset-0 opacity-[0.02] pointer-events-none" style={{ backgroundImage: 'linear-gradient(45deg, white 1px, transparent 1px)', backgroundSize: '20px 20px' }} />
-            <div className="relative z-10">
-              <div className="flex items-center gap-3 mb-8 text-white">
-                <div className="w-2 h-2 bg-white rounded-full animate-pulse shadow-[0_0_10px_rgba(255,255,255,0.8)]" />
-                <span className="text-[10px] tracking-[0.4em] uppercase">System_Response</span>
-              </div>
-              <div className="space-y-6 text-xs md:text-sm tracking-[0.2em] md:tracking-widest text-white/70 uppercase">
-                <p className="text-white glow-subtle font-medium">[SUCCESS]: AUDIT_DATA_STREAM_CAPTURED</p>
-                <p>STATUS: ANALYZING_OPERATIONAL_VULNERABILITIES...</p>
-                <p className="pt-4 border-t border-white/10 text-white/50">FINAL_STEP: Check your email for the coordinate report.</p>
-              </div>
-            </div>
-          </motion.div>
-        ) : currentStep < STEPS.length ? (
+        {currentStep < STEPS.length ? (
           <motion.div
             key={currentStep}
             initial={{ opacity: 0, x: 20 }}
@@ -101,6 +102,7 @@ export const DiagnosisForm = () => {
               </div>
               {currentStep > 0 && (
                 <button
+                  type="button"
                   onClick={() => setCurrentStep(prev => prev - 1)}
                   className="text-xs text-white/40 hover:text-white flex items-center gap-2 uppercase tracking-widest"
                 >
@@ -114,20 +116,19 @@ export const DiagnosisForm = () => {
             </h3>
 
             <div className="flex flex-col items-center gap-4">
-              {STEPS[currentStep].options.map((option) => {
-                return (
-                  <button
-                    key={option}
-                    onClick={() => handleOptionSelect(option)}
-                    className="group w-full max-w-[500px] p-4 md:p-6 min-h-[60px] md:min-h-[80px] border border-white/10 hover:border-white hover:bg-white/5 hover:shadow-[0_0_15px_rgba(255,255,255,0.15)] active:bg-white/10 transition-all flex items-center justify-center text-center relative overflow-hidden min-w-0"
-                  >
-                    <span className="text-[10px] md:text-sm tracking-wide md:tracking-widest uppercase text-white/70 group-hover:text-white transition-colors max-w-[85%] leading-relaxed break-words [overflow-wrap:anywhere] whitespace-normal">
-                      {option}
-                    </span>
-                    <ArrowRight className="absolute right-4 md:right-6 w-4 h-4 text-white/50 opacity-0 group-hover:opacity-100 transition-all -translate-x-2 group-hover:translate-x-0 group-hover:text-white shrink-0" />
-                  </button>
-                );
-              })}
+              {STEPS[currentStep].options.map((option) => (
+                <button
+                  type="button"
+                  key={option}
+                  onClick={() => handleOptionSelect(option)}
+                  className="group w-full max-w-[500px] p-4 md:p-6 min-h-[60px] md:min-h-[80px] border border-white/10 hover:border-white hover:bg-white/5 hover:shadow-[0_0_15px_rgba(255,255,255,0.15)] active:bg-white/10 transition-all flex items-center justify-center text-center relative overflow-hidden min-w-0"
+                >
+                  <span className="text-[10px] md:text-sm tracking-wide md:tracking-widest uppercase text-white/70 group-hover:text-white transition-colors max-w-[85%] leading-relaxed break-words [overflow-wrap:anywhere] whitespace-normal">
+                    {option}
+                  </span>
+                  <ArrowRight className="absolute right-4 md:right-6 w-4 h-4 text-white/50 opacity-0 group-hover:opacity-100 transition-all -translate-x-2 group-hover:translate-x-0 group-hover:text-white shrink-0" />
+                </button>
+              ))}
             </div>
           </motion.div>
         ) : (
@@ -161,11 +162,31 @@ export const DiagnosisForm = () => {
               </div>
               <div>
                 <input
+                  type="text"
+                  placeholder="BUSINESS_NAME"
+                  required
+                  value={contactInfo.businessName}
+                  onChange={(e) => setContactInfo(prev => ({ ...prev, businessName: e.target.value }))}
+                  className="w-full bg-black border-b border-white/20 p-4 outline-none focus:border-white transition-all text-sm tracking-widest uppercase"
+                />
+              </div>
+              <div>
+                <input
                   type="email"
                   placeholder="BUSINESS_EMAIL"
                   required
                   value={contactInfo.email}
                   onChange={(e) => setContactInfo(prev => ({ ...prev, email: e.target.value }))}
+                  className="w-full bg-black border-b border-white/20 p-4 outline-none focus:border-white transition-all text-sm tracking-widest uppercase"
+                />
+              </div>
+              <div>
+                <input
+                  type="tel"
+                  placeholder="PHONE"
+                  required
+                  value={contactInfo.phone}
+                  onChange={(e) => setContactInfo(prev => ({ ...prev, phone: e.target.value }))}
                   className="w-full bg-black border-b border-white/20 p-4 outline-none focus:border-white transition-all text-sm tracking-widest uppercase"
                 />
               </div>
@@ -185,7 +206,7 @@ export const DiagnosisForm = () => {
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full py-5 bg-white text-black text-[10px] tracking-[0.4em] font-bold hover:bg-white/90 transition-all uppercase mt-8"
+                className="w-full py-5 bg-white text-black text-[10px] tracking-[0.4em] font-bold hover:bg-white/90 transition-all uppercase mt-8 disabled:opacity-60"
               >
                 {isSubmitting ? 'PROCESSING...' : 'Get My Full Audit RoadMap'}
               </button>
