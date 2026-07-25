@@ -39,7 +39,7 @@ export default function ArticlesPage() {
   const articleSchema = {
     "@context": "https://schema.org",
     "@type": "Blog",
-    "name": "JKG.RESULTS Automation Insights",
+    "name": "jkgresults Automation Insights",
     "url": "https://www.jkgresults.com/articles",
     "blogPost": articles.map(article => ({
       "@type": "BlogPosting",
@@ -49,7 +49,7 @@ export default function ArticlesPage() {
       "abstract": article.excerpt,
       "author": {
         "@type": "Organization",
-        "name": "JKG.RESULTS"
+        "name": "jkgresults"
       }
     }))
   };
@@ -57,7 +57,7 @@ export default function ArticlesPage() {
   return (
     <div className="min-h-screen bg-black text-white font-mono selection:bg-white selection:text-black flex flex-col">
       <Helmet>
-        <title>Articles & Insights | JKG.RESULTS</title>
+        <title>Articles & Insights | jkgresults</title>
         <meta name="description" content="Read our latest insights on AI automation, system architecture, and operational efficiency." />
         <script type="application/ld+json">
           {JSON.stringify(articleSchema)}
@@ -109,11 +109,11 @@ export default function ArticlesPage() {
       <footer className="border-t border-white/10 py-16 px-6 bg-black mt-32">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-8">
           <div className="text-xl font-bold tracking-[0.3em] uppercase flex items-baseline gap-1">
-            <span className="glow-white">JKG</span>
+            <span className="glow-white">jkgresults</span>
             <span className="text-white/70 font-light text-sm tracking-[0.4em]">.RESULTS</span>
           </div>
           <div className="text-[10px] text-white/30 tracking-[0.3em] uppercase">
-            LAST_UPDATED: {currentDate} // © 2024 JKG.RESULTS
+            LAST_UPDATED: {currentDate} // © 2024 jkgresults
           </div>
           <div className="flex gap-12 text-[10px] tracking-[0.3em] uppercase">
             <Link to="/articles" className="text-white hover:text-white transition-colors">Insights</Link>

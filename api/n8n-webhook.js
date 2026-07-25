@@ -9,23 +9,22 @@ export default async function handler(req, res) {
       process.env.NBN_WEBOOK_URL ||
       'http://n8n-hv97zdc1oj8mf4powdw0cras.34.27.240.166.sslip.io/webhook/7c0224cd-a93a-484c-83de-674a96c4b44a';
 
-    if (!webhookUrl) {
-      return res.status(500).json({ error: 'Webhook URL not configured' });
-    }
-
     const payload = typeof req.body === 'string' ? JSON.parse(req.body) : req.body || {};
 
-    // This n8n webhook is registered for GET only (POST returns 404).
-    // Forward fields as query params so the workflow still receives the data.
+    // n8n webhook node is GET-only — forward fields as query params.
     const params = new URLSearchParams();
     for (const [key, value] of Object.entries(payload)) {
-      if (value !== undefined && value !== null) {
+      if (value !== undefined && value !== null && value !== '') {
         params.set(key, String(value));
       }
     }
 
     const target = `${webhookUrl}?${params.toString()}`;
-    console.log('Proxying audit lead to n8n (GET)');
+    console.log('Proxying audit lead to n8n (GET)', {
+      friction: payload.friction,
+      team: payload.team,
+      urgency: payload.urgency,
+    });
 
     const n8nResponse = await fetch(target, { method: 'GET' });
     const text = await n8nResponse.text();
@@ -42,11 +41,12 @@ export default async function handler(req, res) {
       return res.status(502).json({
         success: false,
         status: n8nResponse.status,
+        sent: payload,
         data,
       });
     }
 
-    return res.status(200).json({ success: true, data });
+    return res.status(200).json({ success: true, sent: payload, data });
   } catch (error) {
     console.error('Webhook proxy error:', error);
     return res.status(500).json({ error: 'Internal server error' });

@@ -1,35 +1,46 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowRight, ChevronLeft } from 'lucide-react';
+import { ArrowRight, Check, ChevronLeft } from 'lucide-react';
 
 const STEPS = [
   {
     id: 'team',
-    question: 'How many members are in your operational team?',
-    options: ['1-10', '11-50', '51-200', '200+']
+    question: 'How large is the team involved?',
+    options: [
+      '1-5 Employees',
+      '6-15 Employees',
+      '16-50 Employees',
+      '51-200 Employees',
+      '200+ Employees',
+    ],
   },
   {
     id: 'friction',
-    question: 'Which core system module are you looking to implement?',
+    question: "What's your primary workflow bottleneck?",
     options: [
-      'HIGH_PERFORMANCE_WEB_DESIGN',
-      'AUTOMATED_PHONE_RESPONDER',
-      'INSTANT_LEAD_QUALIFICATION',
-      'AUTOMATED_SMS_&_EMAIL',
-      'CRM_INTEGRATION'
-    ]
+      'High Performance Web Design',
+      'Manual Data Entry & CRM Syncing',
+      'Document Processing & Extraction',
+      'Customer Onboarding Friction',
+      'Disconnected Software Tools',
+      'Fragmented Communication',
+    ],
   },
   {
     id: 'urgency',
     question: 'How soon do you need to implement a solution?',
-    options: ['1 Week', 'Next 3 months', 'Researching for future']
-  }
-];
+    options: ['1 Week', 'Next 3 months', 'Researching for future'],
+  },
+] as const;
+
+type StepId = (typeof STEPS)[number]['id'];
 
 export const DiagnosisForm = () => {
   const [currentStep, setCurrentStep] = useState(0);
-  const [answers, setAnswers] = useState<Record<string, string>>({});
+  const [answers, setAnswers] = useState<Partial<Record<StepId, string>>>({});
+  const answersRef = useRef(answers);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
   const [contactInfo, setContactInfo] = useState({
     firstName: '',
     lastName: '',
@@ -39,96 +50,135 @@ export const DiagnosisForm = () => {
     gdprConsent: false,
   });
 
-  const handleOptionSelect = (option: string) => {
-    const stepId = STEPS[currentStep].id;
-    setAnswers(prev => ({ ...prev, [stepId]: option }));
-    if (currentStep < STEPS.length - 1) {
-      setCurrentStep(prev => prev + 1);
-    } else {
-      setCurrentStep(STEPS.length);
-    }
+  const handleOptionSelect = (stepId: StepId, option: string) => {
+    const next = { ...answersRef.current, [stepId]: option };
+    answersRef.current = next;
+    setAnswers(next);
+    setSubmitError(null);
+  };
+
+  const handleContinue = () => {
+    setCurrentStep((prev) => prev + 1);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
+    setSubmitError(null);
+
+    const selected = answersRef.current;
+    const friction = selected.friction ?? '';
+
+    if (!friction) {
+      setSubmitError('Please go back and select a bottleneck.');
+      setIsSubmitting(false);
+      return;
+    }
 
     const formData = {
       name: `${contactInfo.firstName} ${contactInfo.lastName}`.trim(),
       email: contactInfo.email,
       phone: contactInfo.phone,
       businessName: contactInfo.businessName,
-      team: answers.team,
-      friction: answers.friction,
-      urgency: answers.urgency,
+      team: selected.team ?? '',
+      friction,
+      urgency: selected.urgency ?? '',
     };
 
     try {
-      // Post to our Vercel proxy (avoids browser CORS + HTTPS→HTTP mixed-content blocks)
       const response = await fetch('/api/n8n-webhook', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),
       });
 
+      const result = await response.json().catch(() => ({}));
+
       if (!response.ok) {
-        console.error('n8n proxy failed', response.status, await response.text());
+        console.error('n8n proxy failed', response.status, result);
+        setSubmitError(
+          'Could not reach the audit webhook. Activate the n8n workflow (top-right toggle), then try again.',
+        );
+        setIsSubmitting(false);
+        return;
       }
+
+      console.info('Webhook accepted', result.sent);
     } catch (error) {
       console.error('Error sending data to n8n:', error);
+      setSubmitError('Network error sending the audit request. Try again.');
+      setIsSubmitting(false);
+      return;
     }
 
     const calendlyUrl = `https://calendly.com/jacob-jkgresults?name=${encodeURIComponent(formData.name)}&email=${encodeURIComponent(formData.email)}`;
-
     window.location.href = calendlyUrl;
   };
+
+  const activeStep = STEPS[currentStep];
+  const selectedOption = activeStep ? answers[activeStep.id] : undefined;
+
+  const cardClass =
+    'w-full max-w-[480px] mx-auto bg-[rgba(13,17,23,0.75)] border border-white/[0.08] backdrop-blur-[12px] rounded-xl p-6 sm:p-8 shadow-[0_20px_40px_rgba(0,0,0,0.6)]';
 
   return (
     <div className="max-w-xl mx-auto min-h-[320px] sm:min-h-[400px]">
       <AnimatePresence mode="wait">
-        {currentStep < STEPS.length ? (
+        {currentStep < STEPS.length && activeStep ? (
           <motion.div
-            key={currentStep}
+            key={activeStep.id}
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: -20 }}
-            className="space-y-8"
+            className={cardClass}
           >
-            <div className="flex items-center justify-between mb-8 sm:mb-12">
-              <div className="text-[10px] tracking-[0.3em] font-medium text-white/40 uppercase">
-                Step-0{currentStep + 1} / 04
-              </div>
+            <span className="block text-xs font-bold tracking-[0.1em] uppercase text-[#10b981] mb-4">
+              Step {currentStep + 1} of {STEPS.length}
+            </span>
+
+            <h3 className="text-2xl font-medium text-[#f3f4f6] mb-8 leading-snug">
+              {activeStep.question}
+            </h3>
+
+            <div className="flex flex-col gap-2.5">
+              {activeStep.options.map((option) => {
+                const isActive = selectedOption === option;
+                return (
+                  <button
+                    type="button"
+                    key={option}
+                    onClick={() => handleOptionSelect(activeStep.id, option)}
+                    className={`w-full flex items-center justify-between gap-3 rounded-lg px-[18px] py-3.5 text-[0.95rem] text-left border transition-all ${
+                      isActive
+                        ? 'bg-[rgba(16,185,129,0.05)] border-[#10b981] text-white shadow-[0_0_12px_rgba(16,185,129,0.25)]'
+                        : 'bg-white/[0.02] border-white/10 text-[#d1d5db] hover:bg-white/5 hover:border-white/20 hover:text-white'
+                    }`}
+                  >
+                    <span className="min-w-0 break-words [overflow-wrap:anywhere]">{option}</span>
+                    {isActive && <Check className="w-4 h-4 shrink-0 text-[#10b981]" strokeWidth={3} />}
+                  </button>
+                );
+              })}
+            </div>
+
+            <div className="flex gap-3 mt-8">
               {currentStep > 0 && (
                 <button
                   type="button"
-                  onClick={() => setCurrentStep(prev => prev - 1)}
-                  className="text-xs text-white/40 hover:text-white flex items-center gap-2 uppercase tracking-widest"
+                  onClick={() => setCurrentStep((prev) => prev - 1)}
+                  className="flex items-center gap-1 bg-transparent text-[#9ca3af] border border-white/10 rounded-lg py-3 px-4 hover:text-white hover:border-white/20 transition-all"
                 >
-                  <ChevronLeft className="w-3 h-3" /> Back
+                  <ChevronLeft className="w-4 h-4" /> Back
                 </button>
               )}
-            </div>
-
-            <h3 className="text-xl sm:text-2xl md:text-3xl font-light tracking-tight mb-8 sm:mb-12 leading-tight">
-              {STEPS[currentStep].question}
-            </h3>
-
-            <div className="flex flex-col items-center gap-4">
-              {STEPS[currentStep].options.map((option) => (
-                <button
-                  type="button"
-                  key={option}
-                  onClick={() => handleOptionSelect(option)}
-                  className="group w-full max-w-[500px] p-4 md:p-6 min-h-[60px] md:min-h-[80px] border border-white/10 hover:border-white hover:bg-white/5 hover:shadow-[0_0_15px_rgba(255,255,255,0.15)] active:bg-white/10 transition-all flex items-center justify-center text-center relative overflow-hidden min-w-0"
-                >
-                  <span className="text-[10px] md:text-sm tracking-wide md:tracking-widest uppercase text-white/70 group-hover:text-white transition-colors max-w-[85%] leading-relaxed break-words [overflow-wrap:anywhere] whitespace-normal">
-                    {option}
-                  </span>
-                  <ArrowRight className="absolute right-4 md:right-6 w-4 h-4 text-white/50 opacity-0 group-hover:opacity-100 transition-all -translate-x-2 group-hover:translate-x-0 group-hover:text-white shrink-0" />
-                </button>
-              ))}
+              <button
+                type="button"
+                disabled={!selectedOption}
+                onClick={handleContinue}
+                className="flex-1 flex items-center justify-center gap-2 bg-white text-black rounded-lg p-3 font-semibold hover:bg-white/90 transition-all disabled:opacity-40 disabled:cursor-not-allowed"
+              >
+                Continue <ArrowRight className="w-4 h-4" />
+              </button>
             </div>
           </motion.div>
         ) : (
@@ -136,11 +186,27 @@ export const DiagnosisForm = () => {
             key="final"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="space-y-8"
+            className={cardClass}
           >
-            <div className="text-[10px] tracking-[0.3em] font-medium text-white/40 uppercase mb-8 text-center">
-              Final_Step / CONTACT_INFO
+            <div className="flex items-center justify-between mb-4">
+              <button
+                type="button"
+                onClick={() => setCurrentStep(STEPS.length - 1)}
+                className="flex items-center gap-1 text-xs text-[#9ca3af] hover:text-white transition-colors"
+              >
+                <ChevronLeft className="w-4 h-4" /> Back
+              </button>
+              <div className="text-xs font-bold tracking-[0.1em] uppercase text-[#10b981]">
+                Final Step / Contact Info
+              </div>
             </div>
+
+            <div className="text-[10px] tracking-widest uppercase text-white/50 space-y-1 mb-6 text-center border border-white/10 p-4">
+              <p>Team: {answers.team || '—'}</p>
+              <p>Bottleneck: {answers.friction || '—'}</p>
+              <p>Urgency: {answers.urgency || '—'}</p>
+            </div>
+
             <form onSubmit={handleSubmit} className="space-y-6">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <input
@@ -148,16 +214,16 @@ export const DiagnosisForm = () => {
                   placeholder="FIRST_NAME"
                   required
                   value={contactInfo.firstName}
-                  onChange={(e) => setContactInfo(prev => ({ ...prev, firstName: e.target.value }))}
-                  className="w-full bg-black border-b border-white/20 p-4 outline-none focus:border-white transition-all text-sm tracking-widest uppercase"
+                  onChange={(e) => setContactInfo((prev) => ({ ...prev, firstName: e.target.value }))}
+                  className="w-full bg-transparent border-b border-white/20 p-4 outline-none focus:border-white transition-all text-sm tracking-widest uppercase"
                 />
                 <input
                   type="text"
                   placeholder="LAST_NAME"
                   required
                   value={contactInfo.lastName}
-                  onChange={(e) => setContactInfo(prev => ({ ...prev, lastName: e.target.value }))}
-                  className="w-full bg-black border-b border-white/20 p-4 outline-none focus:border-white transition-all text-sm tracking-widest uppercase"
+                  onChange={(e) => setContactInfo((prev) => ({ ...prev, lastName: e.target.value }))}
+                  className="w-full bg-transparent border-b border-white/20 p-4 outline-none focus:border-white transition-all text-sm tracking-widest uppercase"
                 />
               </div>
               <div>
@@ -166,8 +232,8 @@ export const DiagnosisForm = () => {
                   placeholder="BUSINESS_NAME"
                   required
                   value={contactInfo.businessName}
-                  onChange={(e) => setContactInfo(prev => ({ ...prev, businessName: e.target.value }))}
-                  className="w-full bg-black border-b border-white/20 p-4 outline-none focus:border-white transition-all text-sm tracking-widest uppercase"
+                  onChange={(e) => setContactInfo((prev) => ({ ...prev, businessName: e.target.value }))}
+                  className="w-full bg-transparent border-b border-white/20 p-4 outline-none focus:border-white transition-all text-sm tracking-widest uppercase"
                 />
               </div>
               <div>
@@ -176,8 +242,8 @@ export const DiagnosisForm = () => {
                   placeholder="BUSINESS_EMAIL"
                   required
                   value={contactInfo.email}
-                  onChange={(e) => setContactInfo(prev => ({ ...prev, email: e.target.value }))}
-                  className="w-full bg-black border-b border-white/20 p-4 outline-none focus:border-white transition-all text-sm tracking-widest uppercase"
+                  onChange={(e) => setContactInfo((prev) => ({ ...prev, email: e.target.value }))}
+                  className="w-full bg-transparent border-b border-white/20 p-4 outline-none focus:border-white transition-all text-sm tracking-widest uppercase"
                 />
               </div>
               <div>
@@ -186,8 +252,8 @@ export const DiagnosisForm = () => {
                   placeholder="PHONE"
                   required
                   value={contactInfo.phone}
-                  onChange={(e) => setContactInfo(prev => ({ ...prev, phone: e.target.value }))}
-                  className="w-full bg-black border-b border-white/20 p-4 outline-none focus:border-white transition-all text-sm tracking-widest uppercase"
+                  onChange={(e) => setContactInfo((prev) => ({ ...prev, phone: e.target.value }))}
+                  className="w-full bg-transparent border-b border-white/20 p-4 outline-none focus:border-white transition-all text-sm tracking-widest uppercase"
                 />
               </div>
               <div className="flex items-start gap-3 mt-4">
@@ -196,13 +262,16 @@ export const DiagnosisForm = () => {
                   id="gdpr"
                   required
                   checked={contactInfo.gdprConsent}
-                  onChange={(e) => setContactInfo(prev => ({ ...prev, gdprConsent: e.target.checked }))}
+                  onChange={(e) => setContactInfo((prev) => ({ ...prev, gdprConsent: e.target.checked }))}
                   className="mt-1 bg-black border-white/20 focus:ring-0 focus:ring-offset-0"
                 />
                 <label htmlFor="gdpr" className="text-[10px] tracking-widest uppercase text-white/50 leading-relaxed cursor-pointer">
                   I AGREE TO THE PRIVACY PROTOCOL AND CONSENT TO BEING CONTACTED REGARDING THIS AUDIT.
                 </label>
               </div>
+              {submitError && (
+                <p className="text-xs text-red-400 tracking-wide">{submitError}</p>
+              )}
               <button
                 type="submit"
                 disabled={isSubmitting}

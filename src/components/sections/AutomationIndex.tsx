@@ -1,74 +1,70 @@
 import { motion } from 'framer-motion';
-import { ArrowUpRight } from 'lucide-react';
+import { Search, SlidersHorizontal, Lightbulb, ArrowRight } from 'lucide-react';
 
-const insights = [
+const steps = [
   {
-    category: "INSIGHT_REPORT",
-    title: "THE_COST_OF_INERTIA",
-    summary: "Why delaying AI integration costs more than the implementation itself in 2024.",
-    readTime: "4_MIN"
+    icon: Search,
+    title: 'Understand your operation',
+    description:
+      "We start by mapping how your team actually works—not how you think it should work. We look at what's manual, what's repetitive, and where the friction lives.",
   },
   {
-    category: "STRATEGY_BRIEF",
-    title: "SCALING_WITHOUT_HEADCOUNT",
-    summary: "How a logistics partner grew revenue by 3x while maintaining a team of 12.",
-    readTime: "6_MIN"
+    icon: SlidersHorizontal,
+    title: "Identify what's worth automating",
+    description:
+      "Not everything should be automated. We identify what will actually save time and reduce errors, versus what would create more complexity than it's worth.",
   },
   {
-    category: "TECHNICAL_WHITE_PAPER",
-    title: "AGENTIC_INFRASTRUCTURE",
-    summary: "Moving beyond simple chatbots to autonomous decision-making agents.",
-    readTime: "9_MIN"
-  }
+    icon: Lightbulb,
+    title: 'Design a clear path forward',
+    description:
+      "You'll get a straightforward breakdown of what can be built, what it involves, and what the impact would be. No jargon, no inflated promises.",
+  },
+  {
+    icon: ArrowRight,
+    title: 'You decide what makes sense',
+    description:
+      "There's no pressure to move forward with us. You'll have everything you need to make an informed decision—whether that's building with us, doing it internally, or waiting.",
+  },
 ];
 
 export const AutomationIndex = () => {
   return (
     <section id="about" className="py-16 md:py-32 px-4 sm:px-6 overflow-x-hidden w-full">
-      <div className="w-full max-w-7xl mx-auto flex flex-col items-center justify-center text-center min-w-0">
-        <div className="flex flex-col items-center justify-center text-center mb-16 md:mb-24 gap-6 w-full min-w-0">
-          <div className="w-full max-w-2xl mx-auto">
-            <h2 className="text-3xl sm:text-4xl md:text-5xl font-light mb-6 sm:mb-8 tracking-tight uppercase text-center break-words [overflow-wrap:anywhere] whitespace-normal">
-              The_Automation_Index
-            </h2>
-            <p className="text-white/40 text-sm tracking-widest uppercase leading-loose text-center break-words [overflow-wrap:anywhere] whitespace-normal">
-              Latest insights into the evolution of autonomous business operating systems.
-            </p>
-          </div>
-          <button className="text-[10px] tracking-[0.4em] uppercase border-b border-white/20 pb-2 hover:border-white transition-all text-white/60 hover:text-white">
-            View_Full_Archive
-          </button>
+      <div className="w-full max-w-4xl mx-auto min-w-0">
+        <div className="mb-12 md:mb-16 w-full min-w-0">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-light mb-4 tracking-tight text-[#f3f4f6] break-words">
+            How we approach this
+          </h2>
+          <p className="text-sm sm:text-base text-[#9ca3af] break-words">
+            A systematic framework to identify and build high-impact automation.
+          </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-px bg-white/10 border border-white/10 w-full min-w-0">
-          {insights.map((item, index) => (
+        <div className="flex flex-col gap-5 w-full min-w-0">
+          {steps.map((step, index) => (
             <motion.div
-              key={item.title}
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              transition={{ delay: index * 0.1 }}
-              className="bg-black p-5 sm:p-10 group cursor-pointer relative overflow-hidden h-full flex flex-col min-w-0 text-center items-center"
+              key={step.title}
+              initial={{ opacity: 0, y: 16 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ delay: index * 0.08 }}
+              className="relative w-full min-w-0"
             >
-              <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-white/20 to-transparent scale-x-0 group-hover:scale-x-100 transition-transform duration-700" />
-
-              <div className="flex justify-between items-start mb-10 sm:mb-12 w-full gap-3">
-                <span className="text-[9px] tracking-[0.2em] sm:tracking-[0.3em] text-white/30 uppercase text-left min-w-0 break-words [overflow-wrap:anywhere] whitespace-normal">
-                  {item.category}
-                </span>
-                <ArrowUpRight className="w-4 h-4 text-white/20 group-hover:text-white transition-all transform group-hover:translate-x-1 group-hover:-translate-y-1 shrink-0" />
-              </div>
-
-              <h3 className="w-full text-lg sm:text-xl md:text-2xl font-medium mb-6 tracking-wide group-hover:text-white transition-colors text-center break-words [overflow-wrap:anywhere] whitespace-normal">
-                {item.title}
-              </h3>
-
-              <p className="w-full text-sm text-white/50 leading-relaxed font-light mb-auto break-words [overflow-wrap:anywhere] whitespace-normal">
-                {item.summary}
-              </p>
-
-              <div className="mt-10 sm:mt-12 flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-[10px] tracking-widest text-white/20 uppercase w-full">
-                <span className="break-words">RESOURCES // 0{index + 1}</span>
-                <span className="break-words">{item.readTime}_READ</span>
+              <span className="absolute -top-2 -left-1 sm:-left-6 text-[10px] font-semibold text-emerald-400/80 tracking-widest">
+                0{index + 1}
+              </span>
+              <div className="glass-card hover:border-emerald-500/40 hover:glow-emerald transition-all duration-500 p-5 sm:p-7 flex items-start gap-5 min-w-0">
+                <div className="w-12 h-12 rounded-lg bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center shrink-0">
+                  <step.icon className="w-5 h-5 text-emerald-400" />
+                </div>
+                <div className="min-w-0 text-left">
+                  <h3 className="text-base sm:text-lg font-medium text-[#f3f4f6] mb-2 break-words">
+                    {step.title}
+                  </h3>
+                  <p className="text-sm text-[#9ca3af] leading-relaxed break-words">
+                    {step.description}
+                  </p>
+                </div>
               </div>
             </motion.div>
           ))}

@@ -62,7 +62,7 @@ export function FAQ() {
   };
 
   return (
-    <section className="py-16 md:py-32 px-4 sm:px-6 border-t border-white/5 bg-black overflow-x-hidden w-full">
+    <section className="py-16 md:py-32 px-4 sm:px-6 border-t border-white/5 overflow-x-hidden w-full">
       <Helmet>
         <script type="application/ld+json">
           {JSON.stringify(faqSchema)}
@@ -70,32 +70,30 @@ export function FAQ() {
       </Helmet>
       <div className="w-full max-w-4xl mx-auto flex flex-col items-center justify-center text-center min-w-0">
         <div className="text-center mb-12 md:mb-20 w-full min-w-0">
-           <h2 className="text-3xl sm:text-4xl md:text-5xl font-light mb-6 tracking-tight uppercase leading-tight break-words [overflow-wrap:anywhere] whitespace-normal">
-             Frequently_Asked
-             <br />
-             <span className="glow-white font-medium">Questions</span>
+           <h2 className="text-3xl sm:text-4xl md:text-5xl font-light mb-4 tracking-tight leading-tight text-[#f3f4f6] break-words">
+             Frequently asked questions
            </h2>
-           <p className="text-[10px] text-white/40 tracking-[0.3em] sm:tracking-[0.4em] uppercase break-words">Knowledge_Base // Query_Resolution</p>
+           <p className="text-sm text-[#9ca3af] break-words">Everything you need to know before getting started.</p>
         </div>
 
         <div className="flex flex-col gap-4 w-full min-w-0">
           {faqs.map((faq, index) => (
-            <div 
-              key={index} 
-              className={`border border-white/10 transition-all duration-300 min-w-0 overflow-hidden ${openIndex === index ? 'bg-white/5' : 'bg-black hover:bg-white/[0.02]'}`}
+            <div
+              key={index}
+              className={`glass-card transition-all duration-300 min-w-0 overflow-hidden ${openIndex === index ? 'border-emerald-500/40 glow-emerald' : 'hover:border-white/20'}`}
             >
               <button
-                className="w-full px-4 sm:px-6 py-6 flex items-center justify-between text-left gap-4 min-w-0"
+                className="w-full px-4 sm:px-6 py-5 flex items-center justify-between text-left gap-4 min-w-0"
                 onClick={() => setOpenIndex(openIndex === index ? null : index)}
               >
-                <span className="text-sm tracking-wide uppercase text-white/90 min-w-0 break-words [overflow-wrap:anywhere] whitespace-normal">{faq.question}</span>
-                <ChevronDown className={`w-5 h-5 text-white/40 transition-transform duration-300 shrink-0 ${openIndex === index ? 'rotate-180' : ''}`} />
+                <span className="text-sm sm:text-base text-[#f3f4f6] min-w-0 break-words">{faq.question}</span>
+                <ChevronDown className={`w-5 h-5 transition-all duration-300 shrink-0 ${openIndex === index ? 'rotate-180 text-emerald-400' : 'text-[#9ca3af]'}`} />
               </button>
-              
-              <div 
+
+              <div
                 className={`overflow-hidden transition-all duration-300 ${openIndex === index ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'}`}
               >
-                <p className="px-4 sm:px-6 pb-6 text-white/50 text-sm leading-relaxed text-left break-words [overflow-wrap:anywhere]">
+                <p className="px-4 sm:px-6 pb-6 text-[#9ca3af] text-sm leading-relaxed text-left break-words">
                   {faq.answer}
                 </p>
               </div>

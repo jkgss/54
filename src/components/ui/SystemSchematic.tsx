@@ -1,107 +1,90 @@
-import { useRef } from 'react';
-import { motion, useScroll, useTransform } from 'framer-motion';
+import { motion } from 'framer-motion';
+import { Database, Cpu, Share2, MessageSquare, Zap, Users, TrendingDown } from 'lucide-react';
+
+const nodes = [
+  { icon: Database, label: 'Data Ingestion' },
+  { icon: Cpu, label: 'AI Processing' },
+  { icon: Share2, label: 'Tool Orchestration' },
+  { icon: MessageSquare, label: 'Human Feedback' },
+];
+
+const stats = [
+  {
+    icon: Zap,
+    stat: '80% Reduction',
+    label: 'Processing time',
+    description: 'Automated document extraction and routing for a regional healthcare provider.',
+  },
+  {
+    icon: Users,
+    stat: '1,200+ Hours',
+    label: 'Saved monthly',
+    description: 'Reclaimed team capacity by syncing disparate CRM and financial tools.',
+  },
+  {
+    icon: TrendingDown,
+    stat: '0% Error Rate',
+    label: 'In data entry',
+    description: 'Eliminated manual transcription errors in high-stakes financial reporting.',
+  },
+];
 
 export const SystemSchematic = () => {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start end", "end start"]
-  });
-
-  const pathLength = useTransform(scrollYProgress, [0.2, 0.8], [0, 1]);
-  const opacity = useTransform(scrollYProgress, [0.1, 0.3, 0.7, 0.9], [0, 1, 1, 0]);
-
   return (
-    <div ref={containerRef} className="relative w-full py-12 md:py-24 flex items-center justify-center overflow-x-hidden">
-      <motion.div style={{ opacity }} className="relative w-full max-w-4xl overflow-x-auto pb-4 scrollbar-thin scrollbar-thumb-white/10 scrollbar-track-transparent">
-        <div className="min-w-[640px] md:min-w-0 aspect-[2/1] mx-auto">
-          <svg viewBox="0 0 800 400" className="w-full h-full">
-            {/* Nodes */}
-            <CircleNode x={100} y={200} label="DATA_INPUT" delay={0.1} />
-            <CircleNode x={300} y={100} label="ANALYSIS_ENGINE" delay={0.3} />
-            <CircleNode x={300} y={300} label="LOGIC_GATE" delay={0.4} />
-            <CircleNode x={500} y={200} label="ACTION_HANDLER" delay={0.6} />
-            <CircleNode x={700} y={200} label="OUTPUT_RESULT" delay={0.8} />
+    <div className="relative w-full flex flex-col gap-16 md:gap-24 overflow-x-hidden">
+      {/* Flow nodes */}
+      <div className="flex flex-wrap items-start justify-center sm:justify-start gap-8 sm:gap-12 w-full">
+        {nodes.map((node, index) => (
+          <motion.div
+            key={node.label}
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ delay: index * 0.15 }}
+            className="flex flex-col items-center gap-3 w-24"
+          >
+            <div className="w-14 h-14 rounded-xl bg-emerald-500/10 border border-emerald-500/40 flex items-center justify-center glow-emerald-strong">
+              <node.icon className="w-6 h-6 text-emerald-400" />
+            </div>
+            <span className="text-[10px] font-semibold tracking-[0.15em] uppercase text-[#9ca3af] text-center leading-relaxed">
+              {node.label}
+            </span>
+          </motion.div>
+        ))}
+      </div>
 
-            {/* Connections */}
-            <motion.path
-              d="M 140 200 L 260 100"
-              fill="none"
-              stroke="white"
-              strokeWidth="1"
-              strokeDasharray="4 4"
-              style={{ pathLength }}
+      {/* Impact stat cards */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-5 w-full min-w-0">
+        {stats.map((item, index) => (
+          <motion.div
+            key={item.stat}
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ delay: index * 0.1 }}
+            className="glass-card hover:border-emerald-500/40 hover:glow-emerald transition-all duration-500 p-5 sm:p-6 flex flex-col min-w-0 text-left"
+          >
+            <div className="flex items-center gap-3 mb-4">
+              <span className="w-9 h-9 rounded-lg bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center shrink-0">
+                <item.icon className="w-4 h-4 text-emerald-400" />
+              </span>
+              <div className="min-w-0">
+                <div className="text-base font-semibold text-white break-words">{item.stat}</div>
+                <div className="text-[10px] tracking-[0.15em] uppercase text-[#9ca3af]">
+                  {item.label}
+                </div>
+              </div>
+            </div>
+            <p className="text-xs text-[#9ca3af] leading-relaxed mb-5 break-words">
+              {item.description}
+            </p>
+            <motion.div
+              className="mt-auto h-[2px] bg-emerald-500/70 rounded-full origin-left"
+              initial={{ scaleX: 0 }}
+              whileInView={{ scaleX: 1 }}
+              transition={{ delay: 0.3 + index * 0.15, duration: 0.8 }}
             />
-            <motion.path
-              d="M 140 200 L 260 300"
-              fill="none"
-              stroke="white"
-              strokeWidth="1"
-              strokeDasharray="4 4"
-              style={{ pathLength }}
-            />
-            <motion.path
-              d="M 340 100 L 460 200"
-              fill="none"
-              stroke="white"
-              strokeWidth="1"
-              style={{ pathLength }}
-            />
-            <motion.path
-              d="M 340 300 L 460 200"
-              fill="none"
-              stroke="white"
-              strokeWidth="1"
-              style={{ pathLength }}
-            />
-            <motion.path
-              d="M 540 200 L 660 200"
-              fill="none"
-              stroke="white"
-              strokeWidth="1"
-              style={{ pathLength }}
-            />
-          </svg>
-        </div>
-      </motion.div>
+          </motion.div>
+        ))}
+      </div>
     </div>
   );
 };
-
-const CircleNode = ({ x, y, label, delay }: { x: number; y: number; label: string; delay: number }) => (
-  <g>
-    <motion.circle
-      cx={x}
-      cy={y}
-      r="40"
-      fill="black"
-      stroke="white"
-      strokeWidth="1"
-      initial={{ scale: 0, opacity: 0 }}
-      whileInView={{ scale: 1, opacity: 1 }}
-      transition={{ delay, duration: 0.5 }}
-      viewport={{ once: false }}
-    />
-    <text
-      x={x}
-      y={y + 60}
-      textAnchor="middle"
-      fill="white"
-      fontSize="10"
-      fontFamily="monospace"
-      letterSpacing="1"
-      className="opacity-40 uppercase"
-    >
-      {label}
-    </text>
-    <motion.circle
-      cx={x}
-      cy={y}
-      r="4"
-      fill="white"
-      initial={{ opacity: 0 }}
-      whileInView={{ opacity: [0, 1, 0] }}
-      transition={{ delay: delay + 0.5, duration: 2, repeat: Infinity }}
-    />
-  </g>
-);
