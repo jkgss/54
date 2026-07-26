@@ -96,8 +96,15 @@ export const DiagnosisForm = () => {
 
       if (!response.ok) {
         console.error('n8n proxy failed', response.status, result);
+        const n8nHint =
+          typeof result?.data?.hint === 'string'
+            ? result.data.hint
+            : typeof result?.data?.message === 'string'
+              ? result.data.message
+              : null;
         setSubmitError(
-          'Could not reach the audit webhook. Activate the n8n workflow (top-right toggle), then try again.',
+          n8nHint ||
+            'Could not reach the audit webhook. If you are testing locally, restart the Vite server after the latest config change. On production, activate the n8n workflow (top-right toggle), then try again.',
         );
         setIsSubmitting(false);
         return;

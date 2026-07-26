@@ -7,4 +7,14 @@ export default defineConfig({
   optimizeDeps: {
     exclude: ['lucide-react'],
   },
+  server: {
+    // Local Vite has no Vercel serverless functions — proxy API calls to production.
+    proxy: {
+      '/api': {
+        target: 'https://54-neon.vercel.app',
+        changeOrigin: true,
+        secure: true,
+      },
+    },
+  },
 });
