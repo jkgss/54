@@ -83,7 +83,14 @@ export const DiagnosisForm = () => {
       team: selected.team ?? '',
       friction,
       urgency: selected.urgency ?? '',
+      gdprConsent: contactInfo.gdprConsent,
     };
+
+    if (!contactInfo.email.trim() || !contactInfo.gdprConsent) {
+      setSubmitError('Please enter your email and accept the consent checkbox to continue.');
+      setIsSubmitting(false);
+      return;
+    }
 
     try {
       const response = await fetch('/api/n8n-webhook', {
@@ -263,17 +270,34 @@ export const DiagnosisForm = () => {
                   className="w-full bg-transparent border-b border-white/20 p-4 outline-none focus:border-white transition-all text-sm tracking-widest uppercase"
                 />
               </div>
-              <div className="flex items-start gap-3 mt-4">
-                <input
-                  type="checkbox"
+              <div className="flex items-start gap-3 mt-2">
+                <button
+                  type="button"
+                  role="checkbox"
+                  aria-checked={contactInfo.gdprConsent}
                   id="gdpr"
-                  required
-                  checked={contactInfo.gdprConsent}
-                  onChange={(e) => setContactInfo((prev) => ({ ...prev, gdprConsent: e.target.checked }))}
-                  className="mt-1 bg-black border-white/20 focus:ring-0 focus:ring-offset-0"
-                />
-                <label htmlFor="gdpr" className="text-[10px] tracking-widest uppercase text-white/50 leading-relaxed cursor-pointer">
-                  I AGREE TO THE PRIVACY PROTOCOL AND CONSENT TO BEING CONTACTED REGARDING THIS AUDIT.
+                  onClick={() =>
+                    setContactInfo((prev) => ({ ...prev, gdprConsent: !prev.gdprConsent }))
+                  }
+                  className={`mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded border transition-all ${
+                    contactInfo.gdprConsent
+                      ? 'border-[#10b981] bg-[rgba(16,185,129,0.15)] shadow-[0_0_8px_rgba(16,185,129,0.35)]'
+                      : 'border-white/20 bg-transparent hover:border-white/40'
+                  }`}
+                >
+                  {contactInfo.gdprConsent && (
+                    <Check className="h-3.5 w-3.5 text-[#10b981]" strokeWidth={3} />
+                  )}
+                </button>
+                <label
+                  htmlFor="gdpr"
+                  onClick={() =>
+                    setContactInfo((prev) => ({ ...prev, gdprConsent: !prev.gdprConsent }))
+                  }
+                  className="text-xs leading-relaxed text-[#9ca3af] cursor-pointer select-none"
+                >
+                  I agree to receive my audit results and occasional marketing updates/newsletters via
+                  email &amp; SMS. I understand I can unsubscribe at any time.
                 </label>
               </div>
               {submitError && (
@@ -281,8 +305,12 @@ export const DiagnosisForm = () => {
               )}
               <button
                 type="submit"
-                disabled={isSubmitting}
-                className="w-full py-5 bg-white text-black text-[10px] tracking-[0.4em] font-bold hover:bg-white/90 transition-all uppercase mt-8 disabled:opacity-60"
+                disabled={
+                  isSubmitting ||
+                  !contactInfo.gdprConsent ||
+                  !contactInfo.email.trim()
+                }
+                className="w-full py-5 bg-white text-black text-[10px] tracking-[0.4em] font-bold hover:bg-white/90 transition-all uppercase mt-8 disabled:opacity-40 disabled:cursor-not-allowed"
               >
                 {isSubmitting ? 'PROCESSING...' : 'Get My Full Audit RoadMap'}
               </button>
