@@ -1,0 +1,67 @@
+<!-- jkgresults email body fragment — paste into n8n HTML email body (not a full page) -->
+<table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="background-color:#060709;margin:0;padding:0;">
+  <tr>
+    <td align="center" style="padding:32px 16px;">
+      <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="max-width:560px;background-color:#0d1117;border:1px solid #1f242b;border-radius:12px;">
+        <tr>
+          <td style="padding:32px 28px;font-family:Inter,-apple-system,'Segoe UI',Helvetica,Arial,sans-serif;">
+
+            <!-- Brand -->
+            <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%">
+              <tr>
+                <td style="padding-bottom:24px;">
+                  <span style="display:inline-block;width:8px;height:8px;border-radius:50%;background-color:#10b981;vertical-align:middle;margin-right:8px;"></span>
+                  <span style="font-size:14px;font-weight:600;color:#ffffff;letter-spacing:0.02em;vertical-align:middle;">jkgresults</span>
+                </td>
+              </tr>
+            </table>
+
+            <!-- Eyebrow -->
+            <p style="margin:0 0 8px 0;font-size:12px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#10b981;">
+              Audit Results
+            </p>
+
+            <!-- Headline -->
+            <h1 style="margin:0 0 12px 0;font-size:28px;font-weight:400;line-height:1.25;color:#f3f4f6;">
+              Your automation audit is ready
+            </h1>
+
+            <!-- Accent rule -->
+            <div style="width:56px;height:3px;background-color:#10b981;border-radius:999px;margin:0 0 20px 0;"></div>
+
+            <!-- Body -->
+            <p style="margin:0 0 16px 0;font-size:15px;line-height:1.6;color:#9ca3af;">
+              Hi {{ $json.query.name || $json.name || 'there' }},
+            </p>
+            <p style="margin:0 0 16px 0;font-size:15px;line-height:1.6;color:#9ca3af;">
+              Thanks for requesting an audit. Based on what you shared, we mapped the highest-friction areas in your operation and outlined where automation can reclaim the most time.
+            </p>
+            <p style="margin:0 0 24px 0;font-size:15px;line-height:1.6;color:#9ca3af;">
+              <strong style="color:#ffffff;">Bottleneck:</strong>
+              {{ $json.query.friction || $json.friction || '—' }}
+            </p>
+
+            <!-- CTA -->
+            <table role="presentation" cellpadding="0" cellspacing="0" border="0">
+              <tr>
+                <td align="left" bgcolor="#ffffff" style="border-radius:8px;">
+                  <a href="https://calendly.com/jacob-jkgresults" target="_blank" style="display:inline-block;background-color:#ffffff;color:#000000;font-family:Inter,-apple-system,'Segoe UI',Helvetica,Arial,sans-serif;font-size:14px;font-weight:600;text-decoration:none;padding:12px 20px;border-radius:8px;">
+                    Book your audit walkthrough →
+                  </a>
+                </td>
+              </tr>
+            </table>
+
+            <!-- Footer -->
+            <p style="margin:28px 0 0 0;font-size:12px;line-height:1.5;color:#9ca3af;">
+              You can unsubscribe from marketing updates anytime.
+              <br />
+              © jkgresults
+            </p>
+
+          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
