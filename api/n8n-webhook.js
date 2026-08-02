@@ -24,6 +24,7 @@ export default async function handler(req, res) {
       friction: payload.friction,
       team: payload.team,
       urgency: payload.urgency,
+      phone: payload.phone || payload.number,
     });
 
     const n8nResponse = await fetch(target, { method: 'GET' });

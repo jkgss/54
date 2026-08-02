@@ -78,7 +78,8 @@ export const DiagnosisForm = () => {
     const formData = {
       name: `${contactInfo.firstName} ${contactInfo.lastName}`.trim(),
       email: contactInfo.email,
-      phone: contactInfo.phone,
+      phone: contactInfo.phone.trim(),
+      number: contactInfo.phone.trim(),
       businessName: contactInfo.businessName,
       team: selected.team ?? '',
       friction,
@@ -86,8 +87,8 @@ export const DiagnosisForm = () => {
       gdprConsent: contactInfo.gdprConsent,
     };
 
-    if (!contactInfo.email.trim() || !contactInfo.gdprConsent) {
-      setSubmitError('Please enter your email and accept the consent checkbox to continue.');
+    if (!contactInfo.email.trim() || !contactInfo.phone.trim() || !contactInfo.gdprConsent) {
+      setSubmitError('Please enter your email, phone number, and accept the consent checkbox to continue.');
       setIsSubmitting(false);
       return;
     }
@@ -263,8 +264,11 @@ export const DiagnosisForm = () => {
               <div>
                 <input
                   type="tel"
-                  placeholder="PHONE"
+                  name="phone"
+                  placeholder="PHONE NUMBER"
                   required
+                  autoComplete="tel"
+                  inputMode="tel"
                   value={contactInfo.phone}
                   onChange={(e) => setContactInfo((prev) => ({ ...prev, phone: e.target.value }))}
                   className="w-full bg-transparent border-b border-white/20 p-4 outline-none focus:border-white transition-all text-sm tracking-widest uppercase"
@@ -308,7 +312,8 @@ export const DiagnosisForm = () => {
                 disabled={
                   isSubmitting ||
                   !contactInfo.gdprConsent ||
-                  !contactInfo.email.trim()
+                  !contactInfo.email.trim() ||
+                  !contactInfo.phone.trim()
                 }
                 className="w-full py-5 bg-white text-black text-[10px] tracking-[0.4em] font-bold hover:bg-white/90 transition-all uppercase mt-8 disabled:opacity-40 disabled:cursor-not-allowed"
               >
