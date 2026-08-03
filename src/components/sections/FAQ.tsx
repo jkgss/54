@@ -4,45 +4,55 @@ import { Helmet } from 'react-helmet-async';
 
 const faqs = [
   {
-    question: "What is AI Automation and how can it help my business?",
-    answer: "AI Automation involves using artificial intelligence to streamline repetitive tasks, analyze data, and optimize processes. It helps businesses reduce manual overhead, minimize errors, and free up human talent for high-value strategic work."
+    question: 'What is an automation audit?',
+    answer:
+      'An automation audit maps how work actually moves through your tools and team, finds repetitive handoffs, and ranks the highest-ROI automations to build first.',
   },
   {
-    question: "How long does it take to implement your AI systems?",
-    answer: "Implementation timelines vary depending on the complexity of the workflow. Basic integrations can be deployed in as little as 2-4 weeks, while comprehensive enterprise-wide systems may take 2-3 months from audit to full deployment."
+    question: 'How long does implementation usually take?',
+    answer:
+      'Focused workflow automations often ship in 2–4 weeks. Broader multi-system builds typically take 6–12 weeks from audit to stable production.',
   },
   {
-    question: "Do I need technical expertise to use your automation solutions?",
-    answer: "No. Our systems are designed with intuitive interfaces. We build the complex backend logic so you and your team can operate the systems easily with minimal training."
+    question: 'Do we need in-house engineers to use what you build?',
+    answer:
+      'No. We design for operators. Your team uses clear interfaces and trusted workflows; we handle the orchestration, integrations, and maintenance path.',
   },
   {
-    question: "Is my data secure with your AI tools?",
-    answer: "Data security is our top priority. We use industry-standard encryption and secure cloud infrastructure. All data processed by our AI models is strictly isolated and never used to train public models without explicit consent."
+    question: 'How do you handle data security?',
+    answer:
+      'We use encrypted transport, least-privilege access, and isolated processing. Client data is not used to train public models without explicit written consent.',
   },
   {
-    question: "Can your systems integrate with my existing software?",
-    answer: "Yes, our automation solutions are designed to integrate seamlessly with most modern CRMs, ERPs, and marketing platforms via APIs and webhooks."
+    question: 'Can this connect to our existing CRM and tools?',
+    answer:
+      'Yes. Most modern CRMs, inboxes, calendars, and ops tools connect through APIs and webhooks. The audit identifies the cleanest integration path for your stack.',
   },
   {
-    question: "What kind of ROI can I expect?",
-    answer: "Our clients typically see a 40-60% reduction in time spent on manual tasks within the first quarter, directly translating into cost savings and increased capacity for revenue-generating activities."
+    question: 'What ROI should we expect?',
+    answer:
+      'Teams commonly reclaim a large share of repetitive admin hours within the first quarter. Exact impact depends on volume, hourly cost, and how stable the process is.',
   },
   {
-    question: "Do you offer ongoing support after implementation?",
-    answer: "Absolutely. We provide ongoing maintenance, system updates, and dedicated support to ensure your automated workflows continue to operate at peak efficiency."
+    question: 'Do you support systems after launch?',
+    answer:
+      'Yes. We offer ongoing monitoring, iteration, and support so automations keep working as your tools and volume change.',
   },
   {
-    question: "How do we get started with an AI audit?",
-    answer: "You can begin by filling out our System Audit form on our website. We will review your current processes and schedule a consultation to identify the highest-impact areas for automation."
+    question: 'How do we get started?',
+    answer:
+      'Submit the free audit form on this site with your team size, main bottleneck, and urgency. We review it and follow up—typically within 24 hours.',
   },
   {
-    question: "Are your solutions customizable?",
-    answer: "Every solution we build is custom-tailored to your specific operational needs, brand guidelines, and business objectives."
+    question: 'Are solutions customized?',
+    answer:
+      'Always. We do not drop in generic templates as the product. Every workflow is tailored to your operations, tools, and decision rules.',
   },
   {
-    question: "What makes your approach different from other agencies?",
-    answer: "We don't just provide off-the-shelf software; we engineer bespoke, high-performance systems. Our focus is on quantifiable results, premium design, and scalable architecture."
-  }
+    question: 'How is jkgresults different from a typical agency?',
+    answer:
+      'We prioritize measurable capacity gains over vanity dashboards. The engagement starts with an audit, then a clear build path you can accept, defer, or run internally.',
+  },
 ];
 
 export function FAQ() {

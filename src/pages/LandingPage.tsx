@@ -12,6 +12,7 @@ import { LogoCloud } from '../components/ui/LogoCloud';
 import { StickyNav } from '../components/ui/StickyNav';
 import { ExitIntent } from '../components/ui/ExitIntent';
 import { Link } from 'react-router-dom';
+import { absoluteUrl, defaultDescription, OG_IMAGE, SITE_URL } from '../lib/seo';
 
 export default function LandingPage() {
   const scrollToContact = () => {
@@ -33,12 +34,20 @@ export default function LandingPage() {
   const currentDate = new Date().toISOString().split('T')[0];
 
   const orgSchema = {
-    "@context": "https://schema.org",
-    "@type": "Organization",
-    "name": "jkgresults",
-    "url": "https://www.jkgresults.com/",
-    "logo": "https://www.jkgresults.com/vite.svg",
-    "description": "Enterprise AI Automation and System Architecture."
+    '@context': 'https://schema.org',
+    '@type': 'Organization',
+    name: 'jkgresults',
+    url: SITE_URL,
+    logo: OG_IMAGE,
+    description: 'Enterprise AI automation and system architecture.',
+  };
+
+  const websiteSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    name: 'jkgresults',
+    url: SITE_URL,
+    description: defaultDescription,
   };
 
   return (
@@ -56,10 +65,19 @@ export default function LandingPage() {
 
       <Helmet>
         <title>jkgresults | AI Automation Agency</title>
-        <meta name="description" content="Quantifying the Efficiency Gap. We build enterprise AI automation workflows to reclaim lost capacity." />
-        <script type="application/ld+json">
-          {JSON.stringify(orgSchema)}
-        </script>
+        <meta name="description" content={defaultDescription} />
+        <link rel="canonical" href={absoluteUrl('/')} />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content={absoluteUrl('/')} />
+        <meta property="og:title" content="jkgresults | AI Automation Agency" />
+        <meta property="og:description" content={defaultDescription} />
+        <meta property="og:image" content={OG_IMAGE} />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="jkgresults | AI Automation Agency" />
+        <meta name="twitter:description" content={defaultDescription} />
+        <meta name="twitter:image" content={OG_IMAGE} />
+        <script type="application/ld+json">{JSON.stringify(orgSchema)}</script>
+        <script type="application/ld+json">{JSON.stringify(websiteSchema)}</script>
       </Helmet>
 
       <StickyNav onBookAudit={scrollToContact} />

@@ -1,5 +1,6 @@
 import { Helmet } from 'react-helmet-async';
 import { Link } from 'react-router-dom';
+import { absoluteUrl } from '../lib/seo';
 
 export default function Unsubscribed() {
   return (
@@ -10,7 +11,10 @@ export default function Unsubscribed() {
           name="description"
           content="You have been unsubscribed from jkgresults marketing emails and SMS."
         />
-        <meta name="robots" content="noindex" />
+        <meta name="robots" content="noindex, nofollow" />
+        <link rel="canonical" href={absoluteUrl('/unsubscribed')} />
+        <meta property="og:url" content={absoluteUrl('/unsubscribed')} />
+        <meta property="og:title" content="Unsubscribed | jkgresults" />
       </Helmet>
 
       {/* Ambient emerald glow */}
