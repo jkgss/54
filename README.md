@@ -49,17 +49,8 @@ A modern, full-stack web application designed for personal trainers to manage se
     # Sentry Configuration
     SENTRY_AUTH_TOKEN=sntrys_your_actual_token_here
 
-    # Stripe (required for checkout)
-    STRIPE_SECRET_KEY=sk_test_your_secret_key_here
-    STRIPE_PRICE_ID=price_500_setup_id_here,price_50_retainer_id_here
-
-    # Stripe (optional - only needed if adding client-side Stripe.js later)
-    STRIPE_PUBLISHABLE_KEY=pk_test_your_publishable_key_here
-    STRIPE_PRODUCT_ID=prod_TzEX3RdDVgUnDw
-
-    # App URL (used for Stripe success/cancel redirects)
-    # In production this is set automatically by Vercel; override here for local dev.
-    NEXT_PUBLIC_APP_URL=http://localhost:5174
+    # n8n (server-side webhook proxy)
+    N8N_WEBHOOK_URL=http://your-n8n-host/webhook/your-id
     ```
 
 4.  **Run the development server**:

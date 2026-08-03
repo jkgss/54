@@ -8,7 +8,7 @@
   - Global screen toast notifications configured to show on the top-left.
   - Branding should follow the existing landing page look & feel.
   - Use **shadcn/ui** components as the primary reference for UI elements.
-- **Payments:** Deferred (Stripe integration to be considered in a future phase).
+- **Payments:** Cancelled for now. Primary path remains free audit → Calendly. Revisit only for a fixed self-serve product.
 
 ## 2. Page Architecture
 
@@ -148,10 +148,6 @@
 - Comprehensive UI/UX review (slugs, modal constraints, branding alignment).
 - QA Testing (RLS constraints, role transitions, history logging logic).
 
-### Phase 6: Stripe Hybrid Application Flow
-- [ ] Configure Stripe Dashboard (Product, Price ID, Webhook).
-- [ ] Update environment variables in Vercel and local `.env`.
-- [ ] Create `/apply` route and Application Form Component.
-- [ ] Create `/success` and `/cancel` routes.
-- [ ] Connect `/apply` form to `/api/create-checkout.js` serverless function.
-- [ ] Test end-to-end flow from form submission -> Stripe Checkout -> `/success` redirect -> n8n webhook firing.
+### Phase 6: Payments (cancelled)
+- ~~Stripe hybrid application flow~~ — cancelled. Keep free audit → Calendly as the primary conversion path.
+- Revisit payments later only if a fixed-priced product is sold self-serve (Payment Link or Checkout).
