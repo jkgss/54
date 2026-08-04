@@ -126,7 +126,7 @@ export const DiagnosisForm = () => {
       return;
     }
 
-    const calendlyUrl = `https://calendly.com/jacob-jkgresults?name=${encodeURIComponent(formData.name)}&email=${encodeURIComponent(formData.email)}`;
+    const calendlyUrl = `https://calendly.com/jacob-jkgresults/website-demo-live-walkthrough?name=${encodeURIComponent(formData.name)}&email=${encodeURIComponent(formData.email)}`;
     window.location.href = calendlyUrl;
   };
 
