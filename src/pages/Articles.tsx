@@ -2,7 +2,14 @@ import { Helmet } from 'react-helmet-async';
 import { Link } from 'react-router-dom';
 import { StickyNav } from '../components/ui/StickyNav';
 import { ArrowLeft, ArrowRight } from 'lucide-react';
-import { absoluteUrl, OG_IMAGE, SITE_URL } from '../lib/seo';
+import {
+  absoluteUrl,
+  OG_IMAGE,
+  OG_IMAGE_HEIGHT,
+  OG_IMAGE_WIDTH,
+  SITE_NAME,
+  SITE_URL,
+} from '../lib/seo';
 
 export type ArticleSection = {
   heading?: string;
@@ -177,6 +184,9 @@ export default function ArticlesPage() {
         <meta property="og:title" content="Articles & Insights | jkgresults" />
         <meta property="og:description" content={description} />
         <meta property="og:image" content={OG_IMAGE} />
+        <meta property="og:image:width" content={OG_IMAGE_WIDTH} />
+        <meta property="og:image:height" content={OG_IMAGE_HEIGHT} />
+        <meta property="og:site_name" content={SITE_NAME} />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content="Articles & Insights | jkgresults" />
         <meta name="twitter:description" content={description} />

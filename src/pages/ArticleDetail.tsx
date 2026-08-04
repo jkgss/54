@@ -3,7 +3,14 @@ import { Helmet } from 'react-helmet-async';
 import { StickyNav } from '../components/ui/StickyNav';
 import { ArrowLeft } from 'lucide-react';
 import { articles } from './Articles';
-import { absoluteUrl, OG_IMAGE, SITE_URL } from '../lib/seo';
+import {
+  absoluteUrl,
+  OG_IMAGE,
+  OG_IMAGE_HEIGHT,
+  OG_IMAGE_WIDTH,
+  SITE_NAME,
+  SITE_URL,
+} from '../lib/seo';
 
 export default function ArticleDetail() {
   const { slug } = useParams();
@@ -54,6 +61,9 @@ export default function ArticleDetail() {
         <meta property="og:title" content={article.title} />
         <meta property="og:description" content={article.excerpt} />
         <meta property="og:image" content={OG_IMAGE} />
+        <meta property="og:image:width" content={OG_IMAGE_WIDTH} />
+        <meta property="og:image:height" content={OG_IMAGE_HEIGHT} />
+        <meta property="og:site_name" content={SITE_NAME} />
         <meta property="article:published_time" content={article.date} />
         <meta property="article:modified_time" content={article.dateModified} />
         <meta name="twitter:card" content="summary_large_image" />

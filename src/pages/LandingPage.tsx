@@ -12,7 +12,15 @@ import { LogoCloud } from '../components/ui/LogoCloud';
 import { StickyNav } from '../components/ui/StickyNav';
 import { ExitIntent } from '../components/ui/ExitIntent';
 import { Link } from 'react-router-dom';
-import { absoluteUrl, defaultDescription, OG_IMAGE, SITE_URL } from '../lib/seo';
+import {
+  absoluteUrl,
+  defaultDescription,
+  OG_IMAGE,
+  OG_IMAGE_HEIGHT,
+  OG_IMAGE_WIDTH,
+  SITE_NAME,
+  SITE_URL,
+} from '../lib/seo';
 
 export default function LandingPage() {
   const scrollToContact = () => {
@@ -72,6 +80,9 @@ export default function LandingPage() {
         <meta property="og:title" content="jkgresults | AI Automation Agency" />
         <meta property="og:description" content={defaultDescription} />
         <meta property="og:image" content={OG_IMAGE} />
+        <meta property="og:image:width" content={OG_IMAGE_WIDTH} />
+        <meta property="og:image:height" content={OG_IMAGE_HEIGHT} />
+        <meta property="og:site_name" content={SITE_NAME} />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content="jkgresults | AI Automation Agency" />
         <meta name="twitter:description" content={defaultDescription} />
