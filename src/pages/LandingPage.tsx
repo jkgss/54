@@ -92,7 +92,7 @@ export default function LandingPage() {
       </Helmet>
 
       <StickyNav onBookAudit={scrollToContact} />
-      <ExitIntent />
+      <ExitIntent onAccessGuide={scrollToContact} />
 
       <main className="overflow-x-hidden w-full relative z-10">
         <Hero onExplore={scrollToFeatures} onConsultation={scrollToContact} />

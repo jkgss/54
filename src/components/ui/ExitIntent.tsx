@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, FileText, ArrowRight } from 'lucide-react';
 
-export const ExitIntent = () => {
+export const ExitIntent = ({ onAccessGuide }: { onAccessGuide: () => void }) => {
   const [isVisible, setIsVisible] = useState(false);
   const [hasShown, setHasShown] = useState(false);
 
@@ -19,6 +19,11 @@ export const ExitIntent = () => {
   }, [hasShown]);
 
   if (!isVisible) return null;
+
+  const goToAudit = () => {
+    setIsVisible(false);
+    onAccessGuide();
+  };
 
   return (
     <AnimatePresence>
@@ -48,25 +53,18 @@ export const ExitIntent = () => {
             </div>
             <h3 className="text-2xl font-light mb-4 tracking-tight text-[#f3f4f6]">Free resource</h3>
             <p className="text-sm text-[#9ca3af] leading-relaxed mb-8">
-              Gartner reports 70% of teams waste 15+ hours/week on "Shadow Ops". Download our guide:
+              Gartner reports 70% of teams waste 15+ hours/week on "Shadow Ops". Get the guide as part of your audit:
               <span className="text-white block mt-2 font-medium">5 red flags your team needs automation</span>
             </p>
 
-            <form className="space-y-4" onSubmit={(e) => { e.preventDefault(); setIsVisible(false); }}>
-              <input
-                type="email"
-                placeholder="Business email"
-                required
-                className="w-full bg-white/[0.02] border border-white/10 rounded-lg p-4 text-sm outline-none focus:border-emerald-500/60 transition-all"
-              />
-              <button
-                type="submit"
-                className="w-full py-3.5 rounded-lg bg-white text-black text-sm font-semibold hover:bg-white/90 transition-all flex items-center justify-center gap-2"
-              >
-                Access the guide
-                <ArrowRight className="w-4 h-4" />
-              </button>
-            </form>
+            <button
+              type="button"
+              onClick={goToAudit}
+              className="w-full py-3.5 rounded-lg bg-white text-black text-sm font-semibold hover:bg-white/90 transition-all flex items-center justify-center gap-2"
+            >
+              Access the guide
+              <ArrowRight className="w-4 h-4" />
+            </button>
           </div>
         </motion.div>
       </div>
