@@ -1,12 +1,7 @@
 User-agent: *
-Allow: /$
-Allow: /articles
+Allow: /
 
-Disallow: /admin/
-Disallow: /client/
-Disallow: /auth/
-Disallow: /profile
-Disallow: /login
-Disallow: /signup
+Disallow: /unsubscribed
+Disallow: /unsubscribe
 
 Sitemap: https://www.jkgresults.com/sitemap.xml

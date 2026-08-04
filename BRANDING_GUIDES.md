@@ -1,86 +1,68 @@
-# Brand Style Guide: JKG.RESULTS
+# jkgresults Branding Guides
 
-This document outlines the exact brand style references extracted from the current codebase. Use this guide to ensure all external communications (e.g., HTML emails via n8n) perfectly match the "high-performance, terminal/system" aesthetic of the web application.
+Style references for on-brand HTML email (and other brand surfaces), taken from the live site.
 
-## 1. Typography
+## Brand
 
-*   **Font Family:** `'IBM Plex Mono', monospace`
-    *   **Google Fonts Import:** `<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500;600;700&display=swap" rel="stylesheet">`
-    *   **Email Fallback:** `Courier New, Courier, monospace`
-*   **Styling Rules:**
-    *   Heavy use of **UPPERCASE** text.
-    *   Wide letter spacing (tracking). Use `letter-spacing: 2px;` to `letter-spacing: 4px;` for headings, small labels, and buttons.
-    *   Thin font weights (`font-weight: 300` or `400`) for regular text and headers.
+- **Name:** `jkgresults` (lowercase)
+- **Tone:** Premium dark tech — clean, calm, sentence case (not ALL_CAPS mono)
+- **Status mark:** small emerald dot `●` before brand/status lines
 
-## 2. Color Palette (Monochromatic)
+## Colors
 
-*   **Backgrounds:** Solid Black (`#000000`)
-*   **Primary Text:** Solid White (`#FFFFFF`)
-*   **Secondary Text (Subtitles/Labels):** Light Grays
-    *   High opacity equivalent (`white/70`): `#B3B3B3`
-    *   Medium opacity equivalent (`white/50`): `#808080`
-    *   Low opacity equivalent (`white/40`): `#666666`
-*   **Borders / Dividers:** Dark Gray (`#1A1A1A` or `#333333`)
-    *   *Tip: Use solid hex codes instead of `rgba` in emails to ensure compatibility across all email clients.*
+| Role | Hex / rgba | Use in email |
+| --- | --- | --- |
+| Page background | `#060709` | Outer email background |
+| Card / panel | `#0d1117` (solid stand-in for `rgba(13,17,23,0.75)`) | Content card |
+| Border | `rgba(255,255,255,0.08)` → `#1f242b` approx | Card + divider borders |
+| Title text | `#f3f4f6` | H1 / H2 |
+| Body text | `#9ca3af` | Paragraphs, labels |
+| Primary text | `#ffffff` | Emphasized words |
+| Accent | `#10b981` | Links, badges, underlines, bullets |
+| Accent soft fill | `rgba(16,185,129,0.15)` → `#0f2a22` | Soft highlight boxes |
+| Ambient glow | `rgba(16,185,129,0.12)` | Optional top-left vignette (image or nested tables) |
+| CTA | `#ffffff` bg / `#000000` text | Primary button |
 
-## 3. Visual Aesthetic & Effects
+## Typography
 
-*   **Minimalist & Border-Driven:** Use thin 1px borders (`border: 1px solid #333333;`) to create structure, instead of large solid-colored blocks.
-*   **Glow Effects:** While complex CSS shadows don't render perfectly in all email clients (like Outlook), you can simulate the glow on modern clients (Apple Mail, Gmail) using text shadows:
-    *   `text-shadow: 0 0 15px rgba(255, 255, 255, 0.4);`
-*   **Terminal Vibe:** Use bracket enclosures or pseudo-code labels for layout elements (e.g., `[SUCCESS]`, `// System_Response`, `Step-01 / 04`).
+- **Font stack:** `'Inter', -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif`
+- **Titles:** light/medium weight (`300–500`), white/`#f3f4f6`, tight tracking
+- **Body:** regular `400`, `#9ca3af`, comfortable line-height `~1.6`
+- **Eyebrow / step labels:** `12px`, **bold**, `letter-spacing: 0.1em`, **uppercase**, color `#10b981`
+- **Brand lockup:** `14px`, semibold, white
 
-## 4. Button Styling
+## Layout (email-safe)
 
-HTML emails require specific structural considerations for buttons. Use this brand-aligned approach:
+- Max content width: **480–600px** centered
+- Card radius: **12px**
+- Inner padding: **32px** (24px on mobile)
+- Section gaps: **24–32px**
+- Borders: `1px solid #1f242b` (or `rgba(255,255,255,0.08)` where supported)
+- Prefer **tables + inline CSS** — no `backdrop-filter`, no Tailwind utilities
 
-*   **Background:** White (`#FFFFFF`)
-*   **Text Color:** Black (`#000000`)
-*   **Font Styling:** Bold (`font-weight: 700`), Uppercase, `letter-spacing: 4px;`
-*   **Padding:** Generous (e.g., `padding: 20px 40px;`)
-*   *Alternative (Ghost Button):* Background Black (`#000000`), Border White (`border: 1px solid #FFFFFF`), Text White (`#FFFFFF`).
+## Components to mirror
 
----
+1. **Header:** emerald status dot + `jkgresults`
+2. **Eyebrow:** emerald uppercase label (e.g. `AUDIT RESULTS`)
+3. **Headline:** large light `#f3f4f6`
+4. **Body:** muted `#9ca3af`
+5. **Accent rule:** short bar `3px` tall × `56px` wide, `#10b981`
+6. **Primary CTA:** solid white pill/rect, black bold text, e.g. `Request an Automation Audit →`
+7. **Secondary link:** `#10b981` or `#9ca3af`
+8. **Footer:** small muted copyright `© jkgresults`
 
-## 5. HTML Email Boilerplate Template
-
-If you are generating an email via n8n or another automation platform, use this foundational structure as your starting point:
+## CTA button example
 
 ```html
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="utf-8">
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;700&display=swap" rel="stylesheet">
-</head>
-<body style="margin: 0; padding: 0; background-color: #000000;">
-  <div style="background-color: #000000; color: #FFFFFF; font-family: 'IBM Plex Mono', Courier, monospace; padding: 40px; text-align: left; max-width: 600px; margin: 0 auto; border: 1px solid #333333;">
-    
-    <!-- System Label -->
-    <div style="margin-bottom: 30px; font-size: 10px; letter-spacing: 4px; color: #808080; text-transform: uppercase;">
-      // System_Response
-    </div>
-
-    <!-- Main Heading -->
-    <h2 style="font-weight: 300; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 20px; color: #FFFFFF;">
-      [SUCCESS]: AUDIT_DATA_STREAM_CAPTURED
-    </h2>
-
-    <!-- Body Copy -->
-    <p style="color: #B3B3B3; font-size: 14px; line-height: 1.6; letter-spacing: 1px;">
-      STATUS: ANALYZING_OPERATIONAL_VULNERABILITIES...
-      <br><br>
-      Your diagnostic input has been received. The system is currently compiling your custom audit roadmap.
-    </p>
-
-    <!-- Call To Action -->
-    <div style="margin-top: 40px; border-top: 1px solid #333333; padding-top: 30px;">
-      <a href="#" style="display: inline-block; background-color: #FFFFFF; color: #000000; padding: 15px 30px; text-decoration: none; font-size: 12px; font-weight: bold; letter-spacing: 4px; text-transform: uppercase;">
-        View Full Roadmap
-      </a>
-    </div>
-
-  </div>
-</body>
-</html>
+<a href="..." style="display:inline-block;background:#ffffff;color:#000000;font-family:Inter,-apple-system,Segoe UI,Helvetica,Arial,sans-serif;font-size:14px;font-weight:600;text-decoration:none;padding:12px 20px;border-radius:8px;">
+  Request an Automation Audit →
+</a>
 ```
+
+## Email caveats vs the site
+
+- Don’t rely on real glass blur — use solid `#0d1117` + thin border
+- Don’t rely on box-shadow glows in Outlook — optional; Gmail/Apple Mail will show soft emerald shadows if you want them
+- Host any logo as a PNG/SVG URL; don’t expect web fonts everywhere (Inter loads where supported; Arial fallback is fine)
+
+Use this palette + Inter + white CTA + emerald accents and the email will read as the same brand as the landing page.

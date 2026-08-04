@@ -3,6 +3,7 @@ import { HelmetProvider } from 'react-helmet-async';
 import LandingPage from './pages/LandingPage';
 import ArticlesPage from './pages/Articles';
 import ArticleDetail from './pages/ArticleDetail';
+import Unsubscribed from './pages/Unsubscribed';
 
 function App() {
   return (
@@ -12,6 +13,8 @@ function App() {
           <Route path="/" element={<LandingPage />} />
           <Route path="/articles" element={<ArticlesPage />} />
           <Route path="/articles/:slug" element={<ArticleDetail />} />
+          <Route path="/unsubscribed" element={<Unsubscribed />} />
+          <Route path="/unsubscribe" element={<Navigate to="/unsubscribed" replace />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </Router>
