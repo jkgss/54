@@ -103,12 +103,17 @@ export const DiagnosisForm = () => {
       const result = await response.json().catch(() => ({}));
 
       if (!response.ok) {
-        console.error('n8n proxy failed', response.status, result);
+        console.error('n8n proxy failed', response.status, {
+          error: result?.error,
+          upstreamStatus: result?.upstreamStatus,
+          upstreamBody: result?.upstreamBody,
+        });
+        const upstreamBody = result?.upstreamBody;
         const n8nHint =
-          typeof result?.data?.hint === 'string'
-            ? result.data.hint
-            : typeof result?.data?.message === 'string'
-              ? result.data.message
+          typeof upstreamBody?.hint === 'string'
+            ? upstreamBody.hint
+            : typeof upstreamBody?.message === 'string'
+              ? upstreamBody.message
               : null;
         setSubmitError(
           n8nHint ||

@@ -1,55 +1,71 @@
+const UPSTREAM_TIMEOUT_MS = 10000;
+
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  try {
-    const webhookUrl =
-      process.env.N8N_WEBHOOK_URL ||
-      process.env.NBN_WEBOOK_URL ||
-      'https://n8n.jkgresults.com/webhook-test/599843a3-a65d-4e79-a603-e3544ebc8813';
-
-    const payload = typeof req.body === 'string' ? JSON.parse(req.body) : req.body || {};
-
-    // n8n webhook node is GET-only — forward fields as query params.
-    const params = new URLSearchParams();
-    for (const [key, value] of Object.entries(payload)) {
-      if (value !== undefined && value !== null && value !== '') {
-        params.set(key, String(value));
-      }
-    }
-
-    const target = `${webhookUrl}?${params.toString()}`;
-    console.log('Proxying audit lead to n8n (GET)', {
-      friction: payload.friction,
-      team: payload.team,
-      urgency: payload.urgency,
-      phone: payload.phone || payload.number,
+  const webhookUrl = process.env.N8N_WEBHOOK_URL;
+  if (!webhookUrl) {
+    console.error('N8N_WEBHOOK_URL is not set');
+    return res.status(500).json({
+      success: false,
+      error: 'N8N_WEBHOOK_URL is not configured on the server',
     });
-
-    const n8nResponse = await fetch(target, { method: 'GET' });
-    const text = await n8nResponse.text();
-
-    let data;
-    try {
-      data = JSON.parse(text);
-    } catch {
-      data = text;
-    }
-
-    if (!n8nResponse.ok) {
-      console.error('n8n error', n8nResponse.status, data);
-      return res.status(502).json({
-        success: false,
-        status: n8nResponse.status,
-        sent: payload,
-        data,
-      });
-    }
-
-    return res.status(200).json({ success: true, sent: payload, data });
-  } catch (error) {
-    console.error('Webhook proxy error:', error);
-    return res.status(500).json({ error: 'Internal server error' });
   }
+
+  let payload;
+  try {
+    payload = typeof req.body === 'string' ? JSON.parse(req.body) : req.body || {};
+  } catch {
+    return res.status(400).json({ success: false, error: 'Request body is not valid JSON' });
+  }
+
+  console.log('Proxying audit lead to n8n (POST)', {
+    friction: payload.friction,
+    team: payload.team,
+    urgency: payload.urgency,
+  });
+
+  let upstream;
+  try {
+    upstream = await fetch(webhookUrl, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+      signal: AbortSignal.timeout(UPSTREAM_TIMEOUT_MS),
+    });
+  } catch (error) {
+    const timedOut = error?.name === 'TimeoutError';
+    console.error('n8n request failed', { timedOut, message: error?.message });
+    return res.status(timedOut ? 504 : 502).json({
+      success: false,
+      error: timedOut
+        ? `n8n did not respond within ${UPSTREAM_TIMEOUT_MS / 1000}s`
+        : `Could not reach n8n: ${error?.message || 'unknown error'}`,
+    });
+  }
+
+  const text = await upstream.text();
+  let upstreamBody;
+  try {
+    upstreamBody = text ? JSON.parse(text) : null;
+  } catch {
+    upstreamBody = text;
+  }
+
+  if (!upstream.ok) {
+    console.error('n8n responded with an error', {
+      upstreamStatus: upstream.status,
+      upstreamBody,
+    });
+    return res.status(502).json({
+      success: false,
+      error: `n8n responded with HTTP ${upstream.status}`,
+      upstreamStatus: upstream.status,
+      upstreamBody,
+    });
+  }
+
+  return res.status(200).json({ success: true, sent: payload, data: upstreamBody });
 }
