@@ -7,7 +7,7 @@ export default async function handler(req, res) {
     const webhookUrl =
       process.env.N8N_WEBHOOK_URL ||
       process.env.NBN_WEBOOK_URL ||
-      'http://n8n-hv97zdc1oj8mf4powdw0cras.34.27.240.166.sslip.io/webhook/7c0224cd-a93a-484c-83de-674a96c4b44a';
+      'https://n8n.jkgresults.com/webhook-test/599843a3-a65d-4e79-a603-e3544ebc8813';
 
     const payload = typeof req.body === 'string' ? JSON.parse(req.body) : req.body || {};
 
